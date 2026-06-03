@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Sales Hisana — Surabaya Raya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0f2f5;
+    --panel: #ffffff;
+    --border: #e2e8f0;
+    --accent: #1e40af;
+    --accent-light: #eff6ff;
+    --accent-mid: #3b82f6;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --green: #15803d;
+    --green-light: #f0fdf4;
+    --teal: #0e7490;
+    --teal-light: #ecfeff;
+    --amber: #92400e;
+    --amber-light: #fffbeb;
+    --shadow-sm: 0 1px 3px rgba(15,23,42,.07), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-md: 0 4px 16px rgba(15,23,42,.08), 0 2px 4px rgba(15,23,42,.04);
+    --shadow-lg: 0 8px 32px rgba(15,23,42,.1), 0 4px 8px rgba(15,23,42,.05);
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .brand-logo svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-top: 1px;
+  }
+
+  .hero {
+    text-align: center;
+    max-width: 540px;
+    margin-bottom: 48px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  .hero-badge span {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-mid);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-width: 980px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-blue::before  { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+  .card-green::before { background: linear-gradient(90deg, #15803d, #22c55e); }
+  .card-teal::before  { background: linear-gradient(90deg, #0e7490, #06b6d4); }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .icon-blue  { background: var(--accent-light); }
+  .icon-green { background: var(--green-light); }
+  .icon-teal  { background: var(--teal-light); }
+
+  .card-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .icon-blue svg  { stroke: var(--accent); }
+  .icon-green svg { stroke: var(--green); }
+  .icon-teal svg  { stroke: var(--teal); }
+
+  .card-body { flex: 1; }
+
+  .card-category {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+
+  .cat-blue  { color: var(--accent); }
+  .cat-green { color: var(--green); }
+  .cat-teal  { color: var(--teal); }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .meta-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text-secondary);
+  }
+
+  .card-cta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .cta-blue  { color: var(--accent); }
+  .cta-green { color: var(--green); }
+  .cta-teal  { color: var(--teal); }
+
+  .card-cta svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: currentColor;
+    transition: transform 0.15s ease;
+  }
+
+  .card:hover .card-cta svg {
+    transform: translateX(3px);
+  }
+
+  .footer {
+    margin-top: 56px;
+    text-align: center;
+  }
+
+  .footer p {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .footer strong {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .divider {
+    width: 40px;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <div class="brand-logo">
+    <svg viewBox="0 0 24 24">
+      <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+    </svg>
+  </div>
+  <div>
+    <div class="brand-name">Hisana Fried Chicken</div>
+    <div class="brand-sub">Surabaya Raya — Business Intelligence</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge"><span></span>Laporan Sales 2026</div>
+  <h1>Pusat Laporan<br>Surabaya Raya</h1>
+  <p>Akses semua dashboard penjualan Hisana Surabaya Raya dalam satu tempat. Data diperbarui secara berkala.</p>
+</div>
+
+<div class="cards-grid">
+
+  <!-- Card 1: Performance Sales Kacab -->
+  <a class="card card-blue" href="dashboard_surabaya_raya_jun_2026_Per_2_Juni_2026.html" target="_blank">
+    <div style="display:flex;gap:16px;align-items:flex-start;">
+      <div class="card-icon icon-blue">
+        <svg viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-category cat-blue">Sales Performance</div>
+        <div class="card-title">Performance Sales per Kacab</div>
+        <div class="card-desc">Ranking dan breakdown omset per kepala cabang, top gerai, dan tren bulanan Surabaya Raya.</div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="meta-tags">
+        <span class="tag">Kacab</span>
+        <span class="tag">Gerai</span>
+      </div>
+      <div class="card-cta cta-blue">
+        Buka
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </a>
+
+  <!-- Card 2: Report Online -->
+  <a class="card card-green" href="REPORT_ONLINE_HISANA_SURABAYA_RAYA.html" target="_blank">
+    <div style="display:flex;gap:16px;align-items:flex-start;">
+      <div class="card-icon icon-green">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-category cat-green">Online Channel</div>
+        <div class="card-title">Report Online Hisana</div>
+        <div class="card-desc">Analisis penjualan channel online: GrabFood, GoFood, ShopeeFood, dan channel digital lainnya.</div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="meta-tags">
+        <span class="tag">GrabFood</span>
+        <span class="tag">GoFood</span>
+        <span class="tag">Online</span>
+      </div>
+      <div class="card-cta cta-green">
+        Buka
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </a>
+
+  <!-- Card 3: Tracking Sales 2023-2026 -->
+  <a class="card card-teal" href="Dashboard_Tracking_Sales_Hisana_2023-2026_Per_2-Juni-2026.html" target="_blank">
+    <div style="display:flex;gap:16px;align-items:flex-start;">
+      <div class="card-icon icon-teal">
+        <svg viewBox="0 0 24 24">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-category cat-teal">Tracking Historis</div>
+        <div class="card-title">Tracking Sales</div>
+        <div class="card-desc">Perbandingan tren penjualan multi-tahun, pertumbuhan gerai, dan analisis performa jangka panjang.</div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="meta-tags">
+        <span class="tag">2023</span>
+        <span class="tag">2024</span>
+        <span class="tag">2025</span>
+        <span class="tag">2026</span>
+      </div>
+      <div class="card-cta cta-teal">
+        Buka
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <div class="divider"></div>
+  <p>Data per <strong>2 Juni 2026</strong> &nbsp;·&nbsp; Hisana Fried Chicken Surabaya Raya</p>
+  <p style="margin-top:6px;">Untuk info lebih lanjut, hubungi tim Business Intelligence.</p>
+</div>
+
+</body>
+</html>

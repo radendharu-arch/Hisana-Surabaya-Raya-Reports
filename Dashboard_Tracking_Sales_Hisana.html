@@ -1091,11 +1091,11 @@ body {
 
 <div id="main">
   <div id="topbar">
-    <button class="tab-btn active" data-tab="overview">🏠 Overview</button>
+    <button class="tab-btn" data-tab="overview">🏠 Overview</button>
     <button class="tab-btn" data-tab="harian">📅 Per Hari</button>
     <button class="tab-btn" data-tab="bulanan">📆 Per Bulan</button>
     <button class="tab-btn" data-tab="tahunan">📊 Per Tahun</button>
-    <button class="tab-btn" data-tab="pola">📅 Pola &amp; Libur</button>
+    <button class="tab-btn active" data-tab="pola">📅 Pola &amp; Libur</button>
     <div class="topbar-spacer"></div>
     <div class="topbar-actions">
       <button class="btn btn-upload" id="btn-upload">
@@ -1112,7 +1112,7 @@ body {
 
   <div id="content">
     <!-- Overview Tab -->
-    <div id="tab-overview" class="tab-content" style="">
+    <div id="tab-overview" class="tab-content" style="display: none;">
       <!-- Partial year banner (hidden by default, shown when 2026 data exists) -->
       <div class="ov-partial-banner" id="ov-partial-banner" style="display: flex;">
         ⚠️ <span id="ov-partial-text">Data 2026 tersedia s/d Jun 2026 — perbandingan YoY menggunakan periode Jan–Jun (apple-to-apple).</span>
@@ -1122,9 +1122,9 @@ body {
       <div class="ov-section-title">📊 KPI Keseluruhan — Semua Gerai</div>
       <div class="ov-kpi-grid" id="ov-kpi-grid">
         <div class="ov-kpi-card blue"><div class="ov-kpi-label">Total Gerai Aktif</div><div class="ov-kpi-value" id="ov-total-gerai">168</div><div class="ov-kpi-sub" id="ov-gerai-sub">dari 168 gerai total · data s/d Jun 2026</div></div>
-        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Total Omset YTD 2026</div><div class="ov-kpi-value" id="ov-omset-ytd">Rp 76.6M</div><div class="ov-kpi-badge down" id="ov-omset-ytd-badge">▼ 15.7% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-omset-ytd-note">Jan–Jun 2026</div></div>
-        <div class="ov-kpi-card purple"><div class="ov-kpi-label">Total NOT YTD 2026</div><div class="ov-kpi-value" id="ov-not-ytd">2.862.356 trx</div><div class="ov-kpi-badge down" id="ov-not-ytd-badge">▼ 12.7% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-not-ytd-note">Jan–Jun 2026</div></div>
-        <div class="ov-kpi-card green"><div class="ov-kpi-label">VOT Rata-rata 2026</div><div class="ov-kpi-value" id="ov-vot-2026">Rp 26.764/trx</div><div class="ov-kpi-badge down" id="ov-vot-badge">▼ 3.4% vs YTD 2025</div><div class="ov-kpi-sub">vs rata-rata 2025</div></div>
+        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Total Omset YTD 2026</div><div class="ov-kpi-value" id="ov-omset-ytd">Rp 73.7M</div><div class="ov-kpi-badge down" id="ov-omset-ytd-badge">▼ 18.9% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-omset-ytd-note">Jan–Jun 2026</div></div>
+        <div class="ov-kpi-card purple"><div class="ov-kpi-label">Total NOT YTD 2026</div><div class="ov-kpi-value" id="ov-not-ytd">2.755.310 trx</div><div class="ov-kpi-badge down" id="ov-not-ytd-badge">▼ 16.0% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-not-ytd-note">Jan–Jun 2026</div></div>
+        <div class="ov-kpi-card green"><div class="ov-kpi-label">VOT Rata-rata 2026</div><div class="ov-kpi-value" id="ov-vot-2026">Rp 26.733/trx</div><div class="ov-kpi-badge down" id="ov-vot-badge">▼ 3.5% vs YTD 2025</div><div class="ov-kpi-sub">vs rata-rata 2025</div></div>
       </div>
 
       
@@ -1133,7 +1133,7 @@ body {
         <div class="ov-kpi-card blue" style="opacity:0.7"><div class="ov-kpi-label">Omset Full Year 2023</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2023">Rp 163.2M</div></div>
         <div class="ov-kpi-card blue" style="opacity:0.8"><div class="ov-kpi-label">Omset Full Year 2024</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2024">Rp 182.5M</div><div class="ov-kpi-badge up" id="ov-om-2024-badge">▲ 11.8% vs 2023</div></div>
         <div class="ov-kpi-card blue" style="opacity:0.9"><div class="ov-kpi-label">Omset Full Year 2025</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2025">Rp 175.9M</div><div class="ov-kpi-badge down" id="ov-om-2025-badge">▼ 3.6% vs 2024</div></div>
-        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Omset YTD 2026</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2026">Rp 76.6M</div><div class="ov-kpi-badge down" id="ov-om-2026-badge">▼ 15.7% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-om-2026-note">Jan–Jun 2026</div></div>
+        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Omset YTD 2026</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2026">Rp 73.7M</div><div class="ov-kpi-badge down" id="ov-om-2026-badge">▼ 18.9% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-om-2026-note">Jan–Jun 2026</div></div>
       </div>
 
       <!-- Two col: Top Gerai + Alerts -->
@@ -1149,61 +1149,61 @@ body {
       <td style="font-weight:500">HASANA 05</td>
       <td style="color:var(--muted);font-size:11px">JOHAN</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.8M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 19.1%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 22.4%</span></td>
     </tr><tr>
       <td><span class="rank">#2</span></td>
       <td style="font-weight:500">JAFAR BIN ABI THOLIB</td>
       <td style="color:var(--muted);font-size:11px">IRWANTO</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.3M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 1.9%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 6.0%</span></td>
     </tr><tr>
       <td><span class="rank">#3</span></td>
       <td style="font-weight:500">ABU BAKAR</td>
       <td style="color:var(--muted);font-size:11px">MUJIB</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.3M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 30.0%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 32.6%</span></td>
     </tr><tr>
       <td><span class="rank">#4</span></td>
       <td style="font-weight:500">ABU DZAR AL GHIFARI</td>
       <td style="color:var(--muted);font-size:11px">FARID</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.1M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 20.7%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 23.9%</span></td>
     </tr><tr>
       <td><span class="rank">#5</span></td>
       <td style="font-weight:500">SABRA BIN MABAD</td>
       <td style="color:var(--muted);font-size:11px">NANDA</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 997.9jt</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 0.3%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 965.5jt</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 3.6%</span></td>
     </tr><tr>
       <td><span class="rank">#6</span></td>
       <td style="font-weight:500">MUAWIYAH BIN MUAWIYAH</td>
       <td style="color:var(--muted);font-size:11px">ANGGIL</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 943.7jt</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 2.8%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 909.1jt</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 6.3%</span></td>
     </tr><tr>
       <td><span class="rank">#7</span></td>
       <td style="font-weight:500">KULTSUM BIN HIKAM RA</td>
       <td style="color:var(--muted);font-size:11px">ARI</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 896.8jt</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 10.7%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 860.6jt</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 14.3%</span></td>
     </tr><tr>
       <td><span class="rank">#8</span></td>
       <td style="font-weight:500">ABUBAKAR ASSIDDIQ</td>
       <td style="color:var(--muted);font-size:11px">MUKHLIS</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 844.4jt</td>
-      <td class="num"><span class="ov-trend-spark up">▲ 47.5%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 810.7jt</td>
+      <td class="num"><span class="ov-trend-spark up">▲ 41.6%</span></td>
     </tr><tr>
       <td><span class="rank">#9</span></td>
       <td style="font-weight:500">HASANA 02</td>
       <td style="color:var(--muted);font-size:11px">MAKHRUS</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 830.3jt</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 22.2%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 793.1jt</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 25.7%</span></td>
     </tr><tr>
       <td><span class="rank">#10</span></td>
       <td style="font-weight:500">ABU DARDA</td>
       <td style="color:var(--muted);font-size:11px">FARID</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 760.9jt</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 19.9%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 729.7jt</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 23.2%</span></td>
     </tr></tbody>
             </table>
           </div>
@@ -1215,37 +1215,37 @@ body {
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>ABU MUJTABA</strong> <span style="opacity:0.7;font-size:11px">WIJAYA</span><br>
-          NOT ▼ 50.5% · 7.294 trx (was 14.727)
+          NOT ▼ 52.1% · 7.061 trx (was 14.727)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>KARIM BIN HAZM</strong> <span style="opacity:0.7;font-size:11px">FAROQ</span><br>
-          NOT ▼ 48.3% · 17.018 trx (was 32.892)
+          NOT ▼ 49.9% · 16.485 trx (was 32.892)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>UMAIR BIN WAHAB</strong> <span style="opacity:0.7;font-size:11px">NANDA</span><br>
-          NOT ▼ 48.1% · 10.658 trx (was 20.526)
+          NOT ▼ 49.3% · 10.403 trx (was 20.526)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>YALA BIN MURRAH</strong> <span style="opacity:0.7;font-size:11px">EKO GEGER</span><br>
-          NOT ▼ 45.2% · 9.307 trx (was 16.985)
+          NOT ▼ 47.4% · 8.927 trx (was 16.985)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>DZIL JAUZAN ADH DIBABI</strong> <span style="opacity:0.7;font-size:11px">ARI</span><br>
-          NOT ▼ 44.2% · 9.835 trx (was 17.627)
+          NOT ▼ 46.0% · 9.513 trx (was 17.627)
         </div>
-      </div><div class="ov-alert-item warn">
-        <span class="ov-alert-icon">🟡</span>
+      </div><div class="ov-alert-item danger">
+        <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>SYURAIH BIN HANI</strong> <span style="opacity:0.7;font-size:11px">EKO GEGER</span><br>
-          NOT ▼ 38.9% · 9.035 trx (was 14.799)
+          NOT ▼ 40.8% · 8.760 trx (was 14.799)
         </div>
       </div></div>
           <div style="margin-top:16px">
@@ -1256,28 +1256,28 @@ body {
                 <tbody><tr>
       <td><span class="rank">#1</span></td>
       <td style="font-weight:500">UMAR BIN KHOTOB (SOLO) <span style="font-size:10px;color:var(--muted)">MUKHLIS</span></td>
-      <td class="num">6.266 trx</td>
+      <td class="num">5.475 trx</td>
       <td class="num">—</td>
     </tr><tr>
       <td><span class="rank">#2</span></td>
-      <td style="font-weight:500">SYAIBAH BIN USTMAN <span style="font-size:10px;color:var(--muted)">AGUS</span></td>
-      <td class="num">6.880 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 25.8%</span></td>
+      <td style="font-weight:500">MUNDZIR BIN AMR <span style="font-size:10px;color:var(--muted)">NANDA</span></td>
+      <td class="num">6.664 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 8.2%</span></td>
     </tr><tr>
       <td><span class="rank">#3</span></td>
-      <td style="font-weight:500">MUNDZIR BIN AMR <span style="font-size:10px;color:var(--muted)">NANDA</span></td>
-      <td class="num">6.882 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 5.2%</span></td>
+      <td style="font-weight:500">FUDHOIL BIN IYADH <span style="font-size:10px;color:var(--muted)">JOHAN</span></td>
+      <td class="num">6.679 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 33.6%</span></td>
     </tr><tr>
       <td><span class="rank">#4</span></td>
-      <td style="font-weight:500">FUDHOIL BIN IYADH <span style="font-size:10px;color:var(--muted)">JOHAN</span></td>
-      <td class="num">6.940 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 31.0%</span></td>
+      <td style="font-weight:500">SYAIBAH BIN USTMAN <span style="font-size:10px;color:var(--muted)">AGUS</span></td>
+      <td class="num">6.691 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 27.8%</span></td>
     </tr><tr>
       <td><span class="rank">#5</span></td>
       <td style="font-weight:500">ABU QUDAMAH <span style="font-size:10px;color:var(--muted)">IMAM</span></td>
-      <td class="num">6.992 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 13.6%</span></td>
+      <td class="num">6.767 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 16.4%</span></td>
     </tr></tbody>
               </table>
             </div>
@@ -1295,35 +1295,35 @@ body {
             <tbody><tr>
       <td style="font-weight:600">SURABAYA</td>
       <td class="num">63</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 30.3M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 29.2M</td>
       <td class="num">39.6%</td>
-      <td class="num">1.104.924 trx</td>
-      <td class="num">Rp 27.456/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 19.5%</span></td>
+      <td class="num">1.063.790 trx</td>
+      <td class="num">Rp 27.415/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 22.6%</span></td>
     </tr><tr>
       <td style="font-weight:600">SIDOARJO</td>
       <td class="num">60</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 27.2M</td>
-      <td class="num">35.5%</td>
-      <td class="num">1.049.818 trx</td>
-      <td class="num">Rp 25.871/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 14.8%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 26.1M</td>
+      <td class="num">35.4%</td>
+      <td class="num">1.009.989 trx</td>
+      <td class="num">Rp 25.846/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 18.1%</span></td>
     </tr><tr>
       <td style="font-weight:600">MOGRES</td>
       <td class="num">37</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 15.9M</td>
-      <td class="num">20.8%</td>
-      <td class="num">595.950 trx</td>
-      <td class="num">Rp 26.759/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 17.2%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 15.4M</td>
+      <td class="num">20.9%</td>
+      <td class="num">574.578 trx</td>
+      <td class="num">Rp 26.736/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 20.2%</span></td>
     </tr><tr>
       <td style="font-weight:600">LATUBOMASO</td>
       <td class="num">8</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 3.2M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 3.0M</td>
       <td class="num">4.1%</td>
-      <td class="num">111.664 trx</td>
-      <td class="num">Rp 28.329/trx</td>
-      <td class="num"><span class="ov-trend-spark up">▲ 53.2%</span></td>
+      <td class="num">106.953 trx</td>
+      <td class="num">Rp 28.299/trx</td>
+      <td class="num"><span class="ov-trend-spark up">▲ 46.5%</span></td>
     </tr></tbody>
           </table>
         </div>
@@ -1556,7 +1556,7 @@ body {
     </div>
 
 <!-- Pola Mingguan + Hari Libur Tab -->
-<div id="tab-pola" class="tab-content" style="display: none;">
+<div id="tab-pola" class="tab-content" style="">
 
   <!-- Controls -->
   <div class="controls-row">
@@ -1657,12 +1657,12 @@ body {
     <div class="ov-kpi-grid" style="margin:14px 0 10px" id="pola-holiday-kpis">
     <div class="ov-kpi-card blue">
       <div class="ov-kpi-label">Total Hari Libur Tercatat</div>
-      <div class="ov-kpi-value" style="font-size:26px">89</div>
+      <div class="ov-kpi-value" style="font-size:26px">90</div>
       <div class="ov-kpi-sub">dalam periode 2023, 2024, 2025, 2026</div>
     </div>
     <div class="ov-kpi-card green">
       <div class="ov-kpi-label">Gerai Tetap Buka</div>
-      <div class="ov-kpi-value" style="font-size:26px">81</div>
+      <div class="ov-kpi-value" style="font-size:26px">82</div>
       <div class="ov-kpi-sub">hari libur dengan penjualan</div>
     </div>
     <div class="ov-kpi-card orange">
@@ -2068,7 +2068,7 @@ body {
           <td style="font-size:12px">Idul Fitri 1446H</td>
           <td style="font-size:12px;color:var(--muted)">Selasa</td>
           <td class="num">Rp 81.8jt</td>
-          <td class="num" style="color:var(--green);font-weight:600">▲ 227.0%</td>
+          <td class="num" style="color:var(--green);font-weight:600">▲ 227.1%</td>
           <td class="num" style="color:var(--green);font-weight:700;font-size:13px">327</td>
         </tr><tr>
           <td style="font-weight:500;white-space:nowrap;font-size:11px">02/04/2025</td>
@@ -2308,6 +2308,13 @@ body {
           <td class="num">Rp 437.2jt</td>
           <td class="num" style="color:var(--red);font-weight:600">▼ 7.8%</td>
           <td class="num" style="color:var(--red);font-weight:700;font-size:13px">92</td>
+        </tr><tr>
+          <td style="font-weight:500;white-space:nowrap;font-size:11px">16/06/2026</td>
+          <td style="font-size:12px">Tahun Baru Islam 1448H</td>
+          <td style="font-size:12px;color:var(--muted)">Selasa</td>
+          <td class="num">Rp 481.3jt</td>
+          <td class="num" style="color:var(--gold);font-weight:600">▲ 3.1%</td>
+          <td class="num" style="color:var(--gold);font-weight:700;font-size:13px">103</td>
         </tr></tbody>
       </table>
     </div>
@@ -4047,7 +4054,7 @@ const ID_HOLIDAYS = {
   '2026-04-03':'Wafat Isa Almasih','2026-05-01':'Hari Buruh Internasional',
   '2026-05-14':'Kenaikan Isa Almasih','2026-05-15':'Cuti Bersama Kenaikan',
   '2026-05-31':'Hari Raya Waisak 2570','2026-06-01':'Hari Lahir Pancasila',
-  '2026-05-27':'Idul Adha 1447H','2026-07-16':'Tahun Baru Islam 1448H',
+  '2026-05-27':'Idul Adha 1447H','2026-06-16':'Tahun Baru Islam 1448H',
   '2026-08-17':'HUT RI ke-81','2026-09-25':'Maulid Nabi Muhammad SAW',
   '2026-12-25':'Hari Raya Natal','2026-12-26':'Cuti Bersama Natal'
 };

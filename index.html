@@ -211,6 +211,7 @@
   .card-blue::before  { background: linear-gradient(90deg, #1e40af, #3b82f6); }
   .card-green::before { background: linear-gradient(90deg, #15803d, #22c55e); }
   .card-teal::before  { background: linear-gradient(90deg, #0e7490, #06b6d4); }
+  .card-amber::before { background: linear-gradient(90deg, #92400e, #f59e0b); }
 
   .card-icon {
     width: 48px;
@@ -225,6 +226,7 @@
   .icon-blue  { background: var(--accent-light); }
   .icon-green { background: var(--green-light); }
   .icon-teal  { background: var(--teal-light); }
+  .icon-amber { background: var(--amber-light); }
 
   .card-icon svg {
     width: 24px;
@@ -238,6 +240,7 @@
   .icon-blue svg  { stroke: var(--accent); }
   .icon-green svg { stroke: var(--green); }
   .icon-teal svg  { stroke: var(--teal); }
+  .icon-amber svg { stroke: var(--amber); }
 
   .card-body { flex: 1; }
 
@@ -252,6 +255,7 @@
   .cat-blue  { color: var(--accent); }
   .cat-green { color: var(--green); }
   .cat-teal  { color: var(--teal); }
+  .cat-amber { color: var(--amber); }
 
   .card-title {
     font-size: 17px;
@@ -303,6 +307,7 @@
   .cta-blue  { color: var(--accent); }
   .cta-green { color: var(--green); }
   .cta-teal  { color: var(--teal); }
+  .cta-amber { color: var(--amber); }
 
   .card-cta svg {
     width: 15px;
@@ -441,6 +446,33 @@
         <span class="tag">2026</span>
       </div>
       <div class="card-cta cta-teal">
+        Buka
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </a>
+
+  <!-- Card 4: Rekap PnL -->
+  <a class="card card-amber" href="dashboard-1.html" target="_blank">
+    <div style="display:flex;gap:16px;align-items:flex-start;">
+      <div class="card-icon icon-amber">
+        <svg viewBox="0 0 24 24">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-category cat-amber">Profit &amp; Loss</div>
+        <div class="card-title">Rekap PnL Hisana</div>
+        <div class="card-desc">Rekap laba rugi Hisana Surabaya Raya: pendapatan, biaya operasional, dan margin per periode.</div>
+      </div>
+    </div>
+    <div class="card-meta">
+      <div class="meta-tags">
+        <span class="tag">PnL</span>
+        <span class="tag">Finance</span>
+      </div>
+      <div class="card-cta cta-amber">
         Buka
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </div>

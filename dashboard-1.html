@@ -275,6 +275,7 @@ th.flag-col,td.flag-col{width:80px;text-align:center;padding:4px 6px;}
 
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -2859,6 +2860,156 @@ function fmtMetric(metric,v){
 function trkSort(col){if(trkSortCol===col)trkSortDir*=-1;else{trkSortCol=col;trkSortDir=-1;}renderTracking();}
 
 // ============================================================
+// DOWNLOAD EXCEL — TAB DETAIL
+// ============================================================
+function downloadDetailExcel(){
+  if(typeof XLSX === 'undefined'){ alert('Library Excel belum siap, coba beberapa detik lagi.'); return; }
+  const name = document.getElementById('detailSelect').value;
+  if(!name){ alert('Pilih gerai/kacab/area terlebih dahulu.'); return; }
+
+  // Ambil data
+  let rows;
+  if(detailLevel==='gerai')      rows = RAW.filter(r=>r.gerai===name);
+  else if(detailLevel==='kacab') rows = RAW.filter(r=>r.kacab===name);
+  else                           rows = RAW.filter(r=>r.area===name);
+  if(!rows.length) return;
+
+  const years  = [...new Set(rows.map(r=>r.tahun))].sort();
+  const months = [1,2,3,4,5,6,7,8,9,10,11,12].filter(m=>rows.some(r=>r.bulan_num===m));
+
+  // Aggregate
+  const agg={}, dayMap={};
+  rows.forEach(r=>{
+    if(!agg[r.tahun]) agg[r.tahun]={};
+    if(!agg[r.tahun][r.bulan_num]) agg[r.tahun][r.bulan_num]=emptyAgg();
+    addTo(agg[r.tahun][r.bulan_num],r);
+  });
+  years.forEach(y=>{ dayMap[y]={}; months.forEach(m=>{ dayMap[y][m]=agg[y]&&agg[y][m]?daysInMonth(y,m):0; }); });
+
+  // Total per tahun (untuk YoY)
+  const yrTotals={};
+  years.forEach(y=>{
+    let tot=emptyAgg(),days=0,has=false;
+    months.forEach(m=>{ if(agg[y]&&agg[y][m]){ addTo(tot,agg[y][m]); days+=dayMap[y][m]||0; has=true; } });
+    yrTotals[y]=has?{obj:tot,days}:null;
+  });
+
+  const COST_KEYS = new Set(['cogs','total_cost','waste']);
+
+  function rawVal(metric, obj, days){
+    if(!obj) return null;
+    if(metric==='margin') return obj.revenue>0?obj.nett_profit/obj.revenue*100:null;
+    if(metric==='avg_sales') return days>0?obj.revenue/days:null;
+    return obj[metric]||0;
+  }
+
+  function yoyVal(metric, curr, prev){
+    if(curr===null||prev===null) return null;
+    if(metric==='margin') return curr-prev; // ppt
+    if(Math.abs(prev)<1) return null;
+    return (curr-prev)/Math.abs(prev)*100;
+  }
+
+  // Build worksheet data (array of arrays)
+  const wsData = [];
+  const styles = []; // track which rows/cols need special style
+
+  // ── TITLE BLOCK ──────────────────────────────────────────
+  const levelLbl = detailLevel==='gerai'?'Gerai':detailLevel==='kacab'?'Kacab':'Area';
+  wsData.push([`REKAP PNL — ${levelLbl.toUpperCase()}: ${name}`]);
+  wsData.push([`Dibuat: ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}`]);
+  wsData.push([]); // blank row
+
+  // Meta info row
+  if(detailLevel==='gerai'){
+    wsData.push(['Area:', rows[0].area, '', 'Kacab:', rows[0].kacab]);
+  } else if(detailLevel==='kacab'){
+    const areas=[...new Set(rows.map(r=>r.area))].sort().join(', ');
+    wsData.push(['Area:', areas, '', 'Jml Gerai:', [...new Set(rows.map(r=>r.gerai))].length]);
+  } else {
+    const kacabs=[...new Set(rows.map(r=>r.kacab))].sort().join(', ');
+    wsData.push(['Kacab:', kacabs, '', 'Jml Gerai:', [...new Set(rows.map(r=>r.gerai))].length]);
+  }
+  wsData.push([]); // blank
+
+  // ── METRICS ──────────────────────────────────────────────
+  const BLN_SHORT = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'Mei',6:'Jun',7:'Jul',8:'Agu',9:'Sep',10:'Okt',11:'Nov',12:'Des'};
+
+  DETAIL_METRICS.forEach(met=>{
+    // Metric title row
+    wsData.push([met.lbl.toUpperCase()]);
+
+    // Header row: Tahun | Jan | Feb | ... | Total/Avg | vs PY
+    const headerRow = ['Tahun'];
+    months.forEach(m=>headerRow.push(BLN_SHORT[m]||m));
+    headerRow.push('Total / Avg');
+    headerRow.push('vs PY');
+    wsData.push(headerRow);
+
+    // Data rows per tahun
+    years.forEach((y,yi)=>{
+      const row = [y];
+      months.forEach(m=>{
+        const obj=agg[y]&&agg[y][m];
+        const v=rawVal(met.key, obj, dayMap[y]&&dayMap[y][m]);
+        row.push(v!==null ? (met.key==='margin'||met.key==='avg_sales' ? parseFloat(v.toFixed(2)) : Math.round(v)) : '');
+      });
+      // Total/Avg
+      const yt=yrTotals[y];
+      const yv=yt?rawVal(met.key,yt.obj,yt.days):null;
+      row.push(yv!==null ? (met.key==='margin'||met.key==='avg_sales' ? parseFloat(yv.toFixed(2)) : Math.round(yv)) : '');
+      // YoY
+      if(yi===0){
+        row.push('—');
+      } else {
+        const prevY=years[yi-1];
+        const pt=yrTotals[prevY];
+        const pv=pt?rawVal(met.key,pt.obj,pt.days):null;
+        const yoy=yoyVal(met.key,yv,pv);
+        if(yoy===null) row.push('—');
+        else row.push(parseFloat(yoy.toFixed(2))+(met.key==='margin'?' ppt':'%'));
+      }
+      wsData.push(row);
+    });
+
+    // Grand total row
+    let gTot=emptyAgg(),gDays=0,hasG=false;
+    years.forEach(y=>months.forEach(m=>{ if(agg[y]&&agg[y][m]){ addTo(gTot,agg[y][m]); gDays+=dayMap[y][m]||0; hasG=true; } }));
+    const grandRow=['Grand Total'];
+    months.forEach(m=>{
+      let ct=emptyAgg(),cd=0,hc=false;
+      years.forEach(y=>{ if(agg[y]&&agg[y][m]){ addTo(ct,agg[y][m]); cd+=dayMap[y][m]||0; hc=true; } });
+      const cv=hc?rawVal(met.key,ct,cd):null;
+      grandRow.push(cv!==null?(met.key==='margin'||met.key==='avg_sales'?parseFloat(cv.toFixed(2)):Math.round(cv)):'');
+    });
+    const gv=hasG?rawVal(met.key,gTot,gDays):null;
+    grandRow.push(gv!==null?(met.key==='margin'||met.key==='avg_sales'?parseFloat(gv.toFixed(2)):Math.round(gv)):'');
+    grandRow.push('');
+    wsData.push(grandRow);
+
+    wsData.push([]); // blank row between metrics
+  });
+
+  // ── BUILD WORKBOOK ────────────────────────────────────────
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Column widths
+  const colWidths = [{ wch: 18 }]; // Tahun
+  months.forEach(()=>colWidths.push({ wch: 14 }));
+  colWidths.push({ wch: 16 }); // Total/Avg
+  colWidths.push({ wch: 12 }); // vs PY
+  ws['!cols'] = colWidths;
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Detail');
+
+  // Filename
+  const safeName = name.replace(/[^a-zA-Z0-9 ]/g,'').trim().substring(0,30);
+  const today = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `Detail_${safeName}_${today}.xlsx`);
+}
+
+// ============================================================
 // DETAIL TAB
 // ============================================================
 let detailLevel = 'gerai'; // 'gerai' | 'kacab' | 'area'
@@ -2871,6 +3022,7 @@ function setDetailLevel(lv, el){
   populateDetailSelect();
   document.getElementById('detailContent').innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--dim);font-size:13px;">Pilih nama untuk melihat breakdown data lengkap.</div>';
   document.getElementById('detailInfo').textContent = '';
+  const btn=document.getElementById('btnDownloadExcel'); if(btn) btn.style.display='none';
 }
 
 function populateDetailSelect(){
@@ -3070,6 +3222,9 @@ function renderDetail(){
 
   info.textContent = `${rows.length} record · ${years.length} tahun`;
   content.innerHTML = metaHtml + legendHtml + tablesHtml;
+  // Tampilkan tombol download
+  const btn = document.getElementById('btnDownloadExcel');
+  if(btn) btn.style.display = 'inline-flex';
 }
 
 function setTab(t,el){
@@ -3125,6 +3280,10 @@ document.addEventListener("DOMContentLoaded", function(){
       <option value="">— Pilih —</option>
     </select>
     <span class="rcount" id="detailInfo"></span>
+    <button id="btnDownloadExcel" onclick="downloadDetailExcel()"
+      style="display:none;margin-left:auto;background:#16a34a;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;gap:6px;align-items:center;display:none;">
+      ⬇ Download Excel
+    </button>
   </div>
   <div id="detailContent">
     <div style="text-align:center;padding:60px 24px;color:var(--dim);font-size:13px;">

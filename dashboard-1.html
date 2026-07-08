@@ -2095,6 +2095,21 @@ function aggRows(rows){
   }),{revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0});
 }
 
+// Untuk setiap gerai, cari kacab & area dari record paling baru (tahun+bulan_num terbesar)
+function latestKacabArea(rows){
+  const map = {};
+  rows.forEach(r=>{
+    const prev = map[r.gerai];
+    if(!prev){
+      map[r.gerai] = {kacab:r.kacab, area:r.area, tahun:r.tahun, bulan_num:r.bulan_num};
+    } else {
+      const newer = r.tahun > prev.tahun || (r.tahun === prev.tahun && r.bulan_num > prev.bulan_num);
+      if(newer) map[r.gerai] = {kacab:r.kacab, area:r.area, tahun:r.tahun, bulan_num:r.bulan_num};
+    }
+  });
+  return map;
+}
+
 function aggBy(rows,keys){
   const m={};
   rows.forEach(r=>{
@@ -2285,20 +2300,21 @@ function pctTd(num, denom, cls){
 // --- GERAI (flat list, all gerai, Area+Kacab as info columns) ---
 function buildGerai(cur,lm,ly,metric){
   // aggregate per gerai (sum bulan if multiple)
+  const latestKA=latestKacabArea(cur);
   const gMap={};
   cur.forEach(r=>{
-    const k=r.area+'||'+r.kacab+'||'+r.gerai;
-    if(!gMap[k])gMap[k]={area:r.area,kacab:r.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0};
+    const k=r.gerai;
+    if(!gMap[k]){const la=latestKA[k]||{kacab:r.kacab,area:r.area};gMap[k]={area:la.area,kacab:la.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0};}
     const g=gMap[k];g.revenue+=r.revenue;g.cogs+=r.cogs;g.total_cost+=r.total_cost;g.op_profit+=r.op_profit;g.nett_profit+=r.nett_profit;g.waste=(g.waste||0)+(r.waste||0);
   });
-  const lmMap=aggBy(lm,['area','kacab','gerai']);
-  const lyMap=aggBy(ly,['area','kacab','gerai']);
+  const lmMap=aggBy(lm,['gerai']);
+  const lyMap=aggBy(ly,['gerai']);
 
   const list=sortList(Object.values(gMap));
   if(!list.length) return '';
 
   return list.map((g,i)=>{
-    const key=g.area+'||'+g.kacab+'||'+g.gerai;
+    const key=g.gerai;
     const glm=lmMap[key], gly=lyMap[key];
     const mc=mgCls(g.nett_profit,g.revenue), mp=mgPct(g.nett_profit,g.revenue);
     const lm_html=lmLabel()?deltaHtml(g[metric],glm?glm[metric]:null):'';
@@ -2414,18 +2430,17 @@ function parseCSV(text){
     gerai:      ci(['Gerai']),
     revenue:    ci(['Revenue']),
     cogs:       ci(['COGS','HPP']),
-    total_cost: ci(['Biaya Harian']),
+    total_cost: ci(['Biaya Harian']),        // Biaya Harian (bukan Total Cost)
     op_profit:  ci(['Operational Profit']),
-    nett_profit:ci(['Nett Profit'])
+    nett_profit:ci(['Nett Profit']),
+    waste:      ci(['Waste']),             // FIX: baca kolom Waste
+    hari_kerja: ci(['Hari Kerja'])         // FIX: baca hari kerja aktual
   };
   function pn(v){
     if(!v||v==='-'||v==='') return 0;
     let s = String(v).trim();
-    // Detect negative: leading minus OR parentheses format (1.234.567)
     const negative = s.startsWith('-') || (s.startsWith('(') && s.endsWith(')'));
-    // Strip leading minus and parentheses
     s = s.replace(/^-/,'').replace(/^\((.+)\)$/,'$1');
-    // Indonesian format: dots as thousand sep, comma as decimal sep
     s = s.replace(/\./g,'').replace(',','.');
     const n = Math.round(parseFloat(s)||0);
     return negative ? -n : n;
@@ -2442,6 +2457,8 @@ function parseCSV(text){
     if(!area||!kacab||!gerai) continue;
     const revenue = pn(c[COL.revenue]);
     if(revenue === 0) continue;
+    // Hari kerja: pakai dari CSV kalau ada, fallback ke daysInMonth
+    const hk = COL.hari_kerja >= 0 ? (parseFloat(c[COL.hari_kerja])||0) : 0;
     result.push({
       tahun:       tahun.trim(),
       bulan_num:   parseInt(c[COL.bulan_num])||0,
@@ -2450,7 +2467,9 @@ function parseCSV(text){
       cogs:        pn(c[COL.cogs]),
       total_cost:  pn(c[COL.total_cost]),
       op_profit:   pn(c[COL.op_profit]),
-      nett_profit: pn(c[COL.nett_profit])
+      nett_profit: pn(c[COL.nett_profit]),
+      waste:       pn(c[COL.waste]),       // FIX: simpan waste
+      hari_kerja:  hk                      // FIX: simpan hari kerja aktual
     });
   }
   return result;
@@ -2666,14 +2685,24 @@ function dH(cur,prev){
   return `<span class="${cls}">${sign}${s}</span>`;
 }
 
-function addTo(target,src){target.revenue+=src.revenue;target.cogs+=src.cogs;target.total_cost+=src.total_cost;target.op_profit+=src.op_profit;target.nett_profit+=src.nett_profit;target.waste=(target.waste||0)+(src.waste||0);}
-function emptyAgg(){return{revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0};}
+function addTo(target,src){
+  target.revenue    += src.revenue    || 0;
+  target.cogs       += src.cogs       || 0;
+  target.total_cost += src.total_cost || 0;
+  target.op_profit  += src.op_profit  || 0;
+  target.nett_profit+= src.nett_profit|| 0;
+  target.waste      += src.waste      || 0;
+  target.hari_kerja += src.hari_kerja || 0;
+}
+function emptyAgg(){return{revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0,hari_kerja:0};}
 
 function buildGeraiMap(rows, colKey){
   const m={};
   rows.forEach(r=>{
-    const gk=r.area+'||'+r.kacab+'||'+r.gerai;
-    if(!m[gk])m[gk]={area:r.area,kacab:r.kacab,gerai:r.gerai,_cols:{}};
+    const gk=r.gerai;
+    if(!m[gk])m[gk]={area:r.area,kacab:r.kacab,gerai:r.gerai,_latestP:0,_cols:{}};
+    const _p=parseInt(r.tahun)*100+(r.bulan_num||0);
+    if(_p>m[gk]._latestP){m[gk].area=r.area;m[gk].kacab=r.kacab;m[gk]._latestP=_p;}
     const ck=r[colKey];
     if(!m[gk]._cols[ck])m[gk]._cols[ck]=emptyAgg();
     addTo(m[gk]._cols[ck],r);
@@ -2898,9 +2927,10 @@ function downloadDetailExcel(){
 
   function rawVal(metric, obj, days){
     if(!obj) return null;
-    if(metric==='margin') return obj.revenue>0?obj.nett_profit/obj.revenue*100:null;
-    if(metric==='avg_sales') return days>0?obj.revenue/days:null;
-    return obj[metric]||0;
+    const hk = (obj.hari_kerja && obj.hari_kerja > 0) ? obj.hari_kerja : (days || 0);
+    if(metric==='margin')    return obj.revenue > 0 ? obj.nett_profit / obj.revenue * 100 : null;
+    if(metric==='avg_sales') return hk > 0 ? obj.revenue / hk : null;
+    return obj[metric] || 0;
   }
 
   function yoyVal(metric, curr, prev){
@@ -3039,9 +3069,11 @@ function populateDetailSelect(){
 
 function gvMetric(metric, obj, days){
   if(!obj) return null;
-  if(metric==='margin') return obj.revenue>0 ? obj.nett_profit/obj.revenue*100 : null;
-  if(metric==='avg_sales') return days>0 ? obj.revenue/days : null;
-  return obj[metric]||0;
+  // Gunakan hari_kerja dari CSV kalau tersedia, fallback ke daysInMonth
+  const hk = (obj.hari_kerja && obj.hari_kerja > 0) ? obj.hari_kerja : (days || 0);
+  if(metric==='margin')    return obj.revenue > 0 ? obj.nett_profit / obj.revenue * 100 : null;
+  if(metric==='avg_sales') return hk > 0 ? obj.revenue / hk : null;
+  return obj[metric] || 0;
 }
 
 function fmtMetric(metric, v){
@@ -4528,19 +4560,20 @@ document.addEventListener("DOMContentLoaded", function(){
 const _origBuildGerai = buildGerai;
 window.buildGerai = function(cur,lm,ly,metric){
   const days = periodDays(selYear, selBulan);
+  const latestKA2=latestKacabArea(cur);
   const gMap={};
   cur.forEach(r=>{
-    const k=r.area+'||'+r.kacab+'||'+r.gerai;
-    if(!gMap[k])gMap[k]={area:r.area,kacab:r.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0};
+    const k=r.gerai;
+    if(!gMap[k]){const la=latestKA2[k]||{kacab:r.kacab,area:r.area};gMap[k]={area:la.area,kacab:la.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,waste:0};}
     const g=gMap[k];g.revenue+=r.revenue;g.cogs+=r.cogs;g.total_cost+=r.total_cost;g.op_profit+=r.op_profit;g.nett_profit+=r.nett_profit;g.waste=(g.waste||0)+(r.waste||0);
   });
   Object.values(gMap).forEach(g=>{ g.avg_sales = days>0 ? g.revenue/days : 0; });
-  const lmMap=aggBy(lm,['area','kacab','gerai']);
-  const lyMap=aggBy(ly,['area','kacab','gerai']);
+  const lmMap=aggBy(lm,['gerai']);
+  const lyMap=aggBy(ly,['gerai']);
   const list=sortList(Object.values(gMap));
   if(!list.length) return '';
   return list.map((g,i)=>{
-    const key=g.area+'||'+g.kacab+'||'+g.gerai;
+    const key=g.gerai;
     const glm=lmMap[key], gly=lyMap[key];
     const mc=mgCls(g.nett_profit,g.revenue), mp=mgPct(g.nett_profit,g.revenue);
     const lm_html=lmLabel()?deltaHtml(g[metric],glm?glm[metric]:null):'';
@@ -4735,10 +4768,11 @@ function renderKPIGerai(){
   const yr = selYear || ALL_YEARS[ALL_YEARS.length-1];
   const cur = filterRows(yr, selBulan);
   const geraiDays = periodDays(yr, selBulan);
+  const latestKA3=latestKacabArea(cur);
   const gMap = {};
   cur.forEach(r=>{
-    const k=r.area+'||'+r.kacab+'||'+r.gerai;
-    if(!gMap[k]) gMap[k]={area:r.area,kacab:r.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,monthly:{}};
+    const k=r.gerai;
+    if(!gMap[k]){const la=latestKA3[k]||{kacab:r.kacab,area:r.area};gMap[k]={area:la.area,kacab:la.kacab,gerai:r.gerai,revenue:0,cogs:0,total_cost:0,op_profit:0,nett_profit:0,monthly:{}};}
     const g=gMap[k];
     g.revenue+=r.revenue;g.cogs+=r.cogs;g.total_cost+=r.total_cost;g.op_profit+=r.op_profit;g.nett_profit+=r.nett_profit;g.waste=(g.waste||0)+(r.waste||0);
     if(!g.monthly[r.bulan_num]) g.monthly[r.bulan_num]={rev:0,nett:0};

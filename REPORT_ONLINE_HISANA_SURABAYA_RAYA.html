@@ -154,8 +154,21 @@
   .platform-growth{font-family:var(--font-num);font-size:10.5px;font-weight:700;}
 
   .trend-wrap{position:relative;}
-  .trend-wrap svg{width:100%;height:150px;display:block;}
+  .trend-wrap svg{width:100%;height:150px;display:block;cursor:crosshair;}
   .trend-panel .trend-wrap svg{height:300px;}
+  .trend-tooltip{
+    position:absolute;top:6px;left:0;pointer-events:none;
+    background:#15182B;color:#fff;border-radius:9px;padding:9px 12px;
+    font-size:11.5px;line-height:1.55;box-shadow:0 8px 20px rgba(15,18,40,.25);
+    transform:translateX(-50%);white-space:nowrap;z-index:5;display:none;
+  }
+  .trend-tooltip .tt-month{font-weight:800;font-size:12px;margin-bottom:5px;color:#fff;}
+  .trend-tooltip .tt-row{display:flex;align-items:center;gap:7px;justify-content:space-between;}
+  .trend-tooltip .tt-row + .tt-row{margin-top:3px;}
+  .trend-tooltip .tt-name{display:flex;align-items:center;gap:6px;font-weight:700;color:#D8DAE6;}
+  .trend-tooltip .tt-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0;}
+  .trend-tooltip .tt-vals{display:flex;gap:10px;font-family:var(--font-num);font-weight:700;}
+  .trend-tooltip .tt-vals .tt-trx{color:#A9ACC0;font-weight:600;}
   .trend-labels{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);margin-top:4px;}
   .trend-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
   .trend-legend .litem{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--ink-soft);}
@@ -331,7 +344,7 @@
       <div class="brand-mark">HR</div>
       <div>
         <h1>Dashboard Online Hisana Surabaya Raya</h1>
-        <div class="meta-line" id="metaLine">Periode data: Jan 2025 – Jul 2026 · Diupdate 05 Agu 2026, 11:08</div>
+        <div class="meta-line" id="metaLine">Periode data: Jan 2025 – Jul 2026 · Diupdate 07 Agu 2026, 08:40</div>
       </div>
     </div>
     <div class="actions">
@@ -363,6 +376,10 @@
     <div class="field">
       <label>Area</label>
       <select id="fArea"><option value="">Semua Area</option><option value="LATUBOMASO">LATUBOMASO</option><option value="MOGRES">MOGRES</option><option value="SIDOARJO">SIDOARJO</option><option value="SURABAYA">SURABAYA</option></select>
+    </div>
+    <div class="field">
+      <label>Platform</label>
+      <select id="fPlatform"><option value="">Semua Platform</option><option value="gofood">Gofood</option><option value="shopeefood">Shopeefood</option><option value="grabfood">Grabfood</option><option value="qpon">Qpon</option><option value="aci">Aci</option></select>
     </div>
     <div class="field grow">
       <label>Cari Gerai</label>
@@ -399,7 +416,8 @@
     <div class="panel-sub" id="trendSub">Sales online per platform · 2026</div>
     <div class="trend-legend" id="trendLegend"><div class="litem"><span class="ldot" style="background:#8BC34A"></span>Gofood</div><div class="litem"><span class="ldot" style="background:#F2994A"></span>Shopeefood</div><div class="litem"><span class="ldot" style="background:#1B7A3D"></span>Grabfood</div><div class="litem"><span class="ldot" style="background:#F2C94C"></span>Qpon</div><div class="litem"><span class="ldot" style="background:#EB5757"></span>Aci</div></div>
     <div class="trend-wrap">
-      <svg id="trendSvg" viewBox="0 0 1200 300" preserveAspectRatio="none"><line x1="1188.0" y1="30" x2="1188.0" y2="288" stroke="#D6D9E2" stroke-width="1" stroke-dasharray="4 3"></line><path d="M12.0,103.7 L208.0,97.1 L404.0,100.7 L600.0,52.6 L796.0,30.0 L992.0,60.8 L1188.0,66.2" fill="none" stroke="#8BC34A" stroke-width="2"></path><path d="M12.0,199.1 L208.0,211.9 L404.0,199.0 L600.0,182.0 L796.0,164.8 L992.0,174.6 L1188.0,182.6" fill="none" stroke="#F2994A" stroke-width="2"></path><path d="M12.0,223.9 L208.0,223.8 L404.0,223.8 L600.0,224.1 L796.0,215.0 L992.0,224.6 L1188.0,217.9" fill="none" stroke="#1B7A3D" stroke-width="2"></path><path d="M12.0,229.5 L208.0,252.0 L404.0,253.9 L600.0,266.9 L796.0,273.7 L992.0,279.7 L1188.0,282.2" fill="none" stroke="#F2C94C" stroke-width="2"></path><path d="M12.0,288.0 L208.0,288.0 L404.0,288.0 L600.0,288.0 L796.0,288.0 L992.0,282.1 L1188.0,278.1" fill="none" stroke="#EB5757" stroke-width="2"></path><circle cx="1188.0" cy="66.2" r="4" fill="#8BC34A" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="56.2" text-anchor="end" font-size="11" font-weight="700" fill="#8BC34A" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">480.2jt</text><circle cx="1188.0" cy="182.6" r="4" fill="#F2994A" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="172.6" text-anchor="end" font-size="11" font-weight="700" fill="#F2994A" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">228.2jt</text><circle cx="1188.0" cy="217.9" r="4" fill="#1B7A3D" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="207.9" text-anchor="end" font-size="11" font-weight="700" fill="#1B7A3D" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">151.8jt</text><circle cx="1188.0" cy="282.2" r="4" fill="#F2C94C" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="272.2" text-anchor="end" font-size="11" font-weight="700" fill="#F2C94C" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">12.7jt</text><circle cx="1188.0" cy="278.1" r="4" fill="#EB5757" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="268.1" text-anchor="end" font-size="11" font-weight="700" fill="#EB5757" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">21.4jt</text></svg>
+      <svg id="trendSvg" viewBox="0 0 1200 300" preserveAspectRatio="none"><line x1="1188.0" y1="30" x2="1188.0" y2="288" stroke="#D6D9E2" stroke-width="1" stroke-dasharray="4 3"></line><path d="M12.0,103.7 L208.0,97.1 L404.0,100.7 L600.0,52.6 L796.0,30.0 L992.0,60.8 L1188.0,66.2" fill="none" stroke="#8BC34A" stroke-width="2"></path><path d="M12.0,199.1 L208.0,211.9 L404.0,199.0 L600.0,182.0 L796.0,164.8 L992.0,174.6 L1188.0,182.6" fill="none" stroke="#F2994A" stroke-width="2"></path><path d="M12.0,223.9 L208.0,223.8 L404.0,223.8 L600.0,224.1 L796.0,215.0 L992.0,224.6 L1188.0,217.9" fill="none" stroke="#1B7A3D" stroke-width="2"></path><path d="M12.0,229.5 L208.0,252.0 L404.0,253.9 L600.0,266.9 L796.0,273.7 L992.0,279.7 L1188.0,282.2" fill="none" stroke="#F2C94C" stroke-width="2"></path><path d="M12.0,288.0 L208.0,288.0 L404.0,288.0 L600.0,288.0 L796.0,288.0 L992.0,282.1 L1188.0,278.1" fill="none" stroke="#EB5757" stroke-width="2"></path><circle cx="1188.0" cy="66.2" r="4" fill="#8BC34A" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="56.2" text-anchor="end" font-size="11" font-weight="700" fill="#8BC34A" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">480.2jt</text><circle cx="1188.0" cy="182.6" r="4" fill="#F2994A" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="172.6" text-anchor="end" font-size="11" font-weight="700" fill="#F2994A" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">228.2jt</text><circle cx="1188.0" cy="217.9" r="4" fill="#1B7A3D" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="207.9" text-anchor="end" font-size="11" font-weight="700" fill="#1B7A3D" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">151.8jt</text><circle cx="1188.0" cy="282.2" r="4" fill="#F2C94C" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="272.2" text-anchor="end" font-size="11" font-weight="700" fill="#F2C94C" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">12.7jt</text><circle cx="1188.0" cy="278.1" r="4" fill="#EB5757" stroke="#fff" stroke-width="1.5"></circle><text x="1182.0" y="268.1" text-anchor="end" font-size="11" font-weight="700" fill="#EB5757" stroke="#fff" stroke-width="3" paint-order="stroke" style="font-family:ui-monospace,monospace">21.4jt</text><g id="trendHoverLayer"></g></svg>
+      <div class="trend-tooltip" id="trendTooltip" style="display: none; left: 1216px;"><div class="tt-month">Jul-26</div><div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:#8BC34A"></span>Gofood</span><span class="tt-vals">Rp 480.213.702<span class="tt-trx">· 7.843 trx</span></span></div><div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:#F2994A"></span>Shopeefood</span><span class="tt-vals">Rp 228.242.930<span class="tt-trx">· 4.976 trx</span></span></div><div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:#1B7A3D"></span>Grabfood</span><span class="tt-vals">Rp 151.785.469<span class="tt-trx">· 4.248 trx</span></span></div><div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:#EB5757"></span>Aci</span><span class="tt-vals">Rp 21.446.500<span class="tt-trx">· 760 trx</span></span></div><div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:#F2C94C"></span>Qpon</span><span class="tt-vals">Rp 12.665.930<span class="tt-trx">· 543 trx</span></span></div></div>
       <div class="trend-labels" id="trendLabels"><span>Jan-26</span><span>Feb-26</span><span>Mar-26</span><span>Apr-26</span><span>May-26</span><span>Jun-26</span><span>Jul-26</span></div>
     </div>
   </div>
@@ -519,7 +537,7 @@
     filename: "REPORT_ONLINE_HISANA_SURABAYA_RAYA_2025-2026_TOTAL_dengan_STATUS_AKTIF_Auto.csv",
     uploadedAt: null,
     rawCsvB64: "",
-    filters: { monthName: "", year: "", kacab: "", area: "", search: "" },
+    filters: { monthName: "", year: "", kacab: "", area: "", search: "", platform: "" },
     tab: "kacab",
     sort: { kacab: {key:"sales", dir:-1}, gerai: {key:"sales", dir:-1} },
     donutExcluded: {}
@@ -715,7 +733,7 @@
     var lastLbl = state.monthOrder[state.monthOrder.length-1] || "";
     var lp = lastLbl.split("-");
     state.filters.monthName = lp[0] || ""; state.filters.year = lp[1] || "";
-    state.filters.kacab = ""; state.filters.area = ""; state.filters.search = "";
+    state.filters.kacab = ""; state.filters.area = ""; state.filters.search = ""; state.filters.platform = "";
     document.getElementById("fSearch").value = "";
     buildFilterOptions();
     renderAll();
@@ -745,6 +763,11 @@
     var areaSel = document.getElementById("fArea");
     areaSel.innerHTML = '<option value="">Semua Area</option>';
     areas.forEach(function(a){ var o=document.createElement("option"); o.value=a; o.textContent=a; areaSel.appendChild(o); });
+
+    var platformSel = document.getElementById("fPlatform");
+    platformSel.innerHTML = '<option value="">Semua Platform</option>';
+    ONLINE_PLATFORMS.forEach(function(p){ var o=document.createElement("option"); o.value=p; o.textContent=PLATFORM_LABEL[p]; platformSel.appendChild(o); });
+    platformSel.value = state.filters.platform;
   }
 
   // ---------------- derived data ----------------
@@ -756,6 +779,12 @@
       if(yr && parts[1]!==yr) return false;
       return true;
     });
+  }
+
+  function activePlatforms(){
+    // Kalau filter platform aktif, semua perhitungan "online" di dashboard
+    // (KPI, breakdown, donut, tren, mix di tabel) hanya menghitung platform itu saja.
+    return state.filters.platform ? [state.filters.platform] : ONLINE_PLATFORMS;
   }
 
   function periodLabel(){
@@ -779,13 +808,15 @@
 
   function storeStatus(store, month){
     // Basis: kolom "Status Aktif" per platform dari CSV, BUKAN angka sales.
-    // Gerai dianggap Aktif jika minimal satu platform berstatus "Aktif" (walau sales bulan itu 0).
+    // Gerai dianggap Aktif jika minimal satu platform (yang relevan) berstatus "Aktif" (walau sales bulan itu 0).
     // Jika tidak ada yang "Aktif" tapi ada yang "Belum Aktif" -> gerai dianggap Non-Aktif.
     // Jika seluruh platform "-" (tidak ada data sama sekali) -> Belum Buka.
+    // Kalau filter Platform aktif, status cuma dicek dari platform itu saja (bukan seluruh platform).
     var m = store.months[month];
     if(!m) return "belum";
+    var checkPlatforms = state.filters.platform ? [state.filters.platform] : PLATFORMS;
     var hasAktif = false, hasBelumAktif = false, hasAny = false;
-    PLATFORMS.forEach(function(p){
+    checkPlatforms.forEach(function(p){
       var st = (m.platforms[p] && m.platforms[p].status) || "";
       if(st){ hasAny = true; }
       if(st === "Aktif") hasAktif = true;
@@ -800,21 +831,23 @@
     months = Array.isArray(months) ? months : [months];
     var lastMonth = months[months.length-1];
     var sales=0, offlineSales=0, trx=0, active=0;
-    var perPlatform = {}; ONLINE_PLATFORMS.forEach(function(p){ perPlatform[p]=0; });
+    var perPlatform = {}, perPlatformTrx = {};
+    activePlatforms().forEach(function(p){ perPlatform[p]=0; perPlatformTrx[p]=0; });
     stores.forEach(function(s){
       months.forEach(function(month){
         var m = s.months[month];
         if(!m) return;
-        ONLINE_PLATFORMS.forEach(function(p){
+        activePlatforms().forEach(function(p){
           sales += m.platforms[p].sales;
           trx += m.platforms[p].not;
           perPlatform[p] += m.platforms[p].sales;
+          perPlatformTrx[p] += m.platforms[p].not;
         });
         offlineSales += m.platforms.offline.sales;
       });
       if(lastMonth && storeStatus(s, lastMonth)==="aktif") active++;
     });
-    return { sales:sales, offlineSales:offlineSales, trx:trx, active:active, total:stores.length, perPlatform:perPlatform };
+    return { sales:sales, offlineSales:offlineSales, trx:trx, active:active, total:stores.length, perPlatform:perPlatform, perPlatformTrx:perPlatformTrx };
   }
 
   var IDN_MONTHS = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
@@ -894,7 +927,7 @@
     var stores = filteredStores();
     var cur = monthTotals(stores, months);
     document.getElementById("platformSub").textContent = periodLabel() + " · " + (state.filters.kacab || "seluruh kacab") + (state.filters.area? " · "+state.filters.area : "");
-    var total = ONLINE_PLATFORMS.reduce(function(a,p){ return a+cur.perPlatform[p]; }, 0);
+    var total = activePlatforms().reduce(function(a,p){ return a+cur.perPlatform[p]; }, 0);
 
     // Tentukan periode pembanding untuk growth MoM
     var prev = null;
@@ -910,7 +943,7 @@
 
     var wrap = document.getElementById("platformBreakdown");
     wrap.innerHTML = "";
-    var sortedP = ONLINE_PLATFORMS.slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
+    var sortedP = activePlatforms().slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
     sortedP.forEach(function(p){
       var val = cur.perPlatform[p];
       var pct = total>0 ? (val/total*100) : 0;
@@ -967,7 +1000,7 @@
     }
 
     var prev = monthTotals(stores, prevMonths);
-    var sortedP = ONLINE_PLATFORMS.slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
+    var sortedP = activePlatforms().slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
     sortedP.forEach(function(p){
       var curVal = cur.perPlatform[p];
       var prevVal = prev.perPlatform[p];
@@ -992,16 +1025,16 @@
     var cur = monthTotals(stores, months);
     document.getElementById("donutSub").textContent = periodLabel() + " · " + (state.filters.kacab || "seluruh kacab") + (state.filters.area? " · "+state.filters.area : "");
 
-    var fullTotal = ONLINE_PLATFORMS.reduce(function(a,p){ return a+cur.perPlatform[p]; }, 0);
-    var includedP = ONLINE_PLATFORMS.filter(function(p){ return !state.donutExcluded[p]; });
+    var fullTotal = activePlatforms().reduce(function(a,p){ return a+cur.perPlatform[p]; }, 0);
+    var includedP = activePlatforms().filter(function(p){ return !state.donutExcluded[p]; });
     var shareTotal = includedP.reduce(function(a,p){ return a+cur.perPlatform[p]; }, 0);
-    document.getElementById("donutCenterValue").textContent = includedP.length + " / " + ONLINE_PLATFORMS.length;
+    document.getElementById("donutCenterValue").textContent = includedP.length + " / " + activePlatforms().length;
 
     var svg = document.getElementById("donutSvg");
     var legend = document.getElementById("donutLegend");
     legend.innerHTML = "";
 
-    var sortedP = ONLINE_PLATFORMS.slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
+    var sortedP = activePlatforms().slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
 
     if(fullTotal<=0){
       svg.innerHTML = '<circle cx="100" cy="100" r="70" fill="none" stroke="#EEEFF3" stroke-width="30"/>';
@@ -1103,7 +1136,7 @@
 
     // Rincian porsi tiap platform online terhadap total keseluruhan (online+offline),
     // plus perubahan porsinya (dalam poin persentase) dibanding periode sebelumnya.
-    var sortedP = ONLINE_PLATFORMS.slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
+    var sortedP = activePlatforms().slice().sort(function(a,b){ return cur.perPlatform[b]-cur.perPlatform[a]; });
     var detailRows = sortedP.map(function(p){
       var val = cur.perPlatform[p];
       var pct = grand>0 ? (val/grand*100) : 0;
@@ -1137,10 +1170,13 @@
   function renderTrend(){
     var stores = filteredStores();
     var tMonths = trendMonths();
-    var seriesData = {};
+    var platforms = activePlatforms();
+    var monthlyTotals = tMonths.map(function(m){ return monthTotals(stores, m); });
+    var seriesData = {}, seriesTrx = {};
     var max = 1;
-    ONLINE_PLATFORMS.forEach(function(p){
-      seriesData[p] = tMonths.map(function(m){ return monthTotals(stores, m).perPlatform[p]; });
+    platforms.forEach(function(p){
+      seriesData[p] = monthlyTotals.map(function(mt){ return mt.perPlatform[p]; });
+      seriesTrx[p] = monthlyTotals.map(function(mt){ return mt.perPlatformTrx[p]; });
       max = Math.max(max, Math.max.apply(null, seriesData[p].concat([0])));
     });
     var w=1200,h=300,pad=12,padTop=30;
@@ -1162,7 +1198,7 @@
 
     var linesHtml = "";
     var dotsHtml = "";
-    ONLINE_PLATFORMS.forEach(function(p){
+    platforms.forEach(function(p){
       var pts = ptsFor(seriesData[p]);
       var linePath = pts.map(function(pt,i){ return (i===0?"M":"L")+pt[0].toFixed(1)+","+pt[1].toFixed(1); }).join(" ");
       linesHtml += '<path d="'+linePath+'" fill="none" stroke="'+PLATFORM_COLOR[p]+'" stroke-width="2"/>';
@@ -1180,13 +1216,13 @@
 
     var svg = document.getElementById("trendSvg");
     svg.setAttribute("viewBox","0 0 "+w+" "+h);
-    svg.innerHTML = guideHtml + linesHtml + dotsHtml;
+    svg.innerHTML = guideHtml + linesHtml + dotsHtml + '<g id="trendHoverLayer"></g>';
 
     document.getElementById("trendSub").textContent = "Sales online per platform · " + (state.filters.year ? "20"+state.filters.year : "Semua Tahun");
 
     var legend = document.getElementById("trendLegend");
     legend.innerHTML = "";
-    ONLINE_PLATFORMS.forEach(function(p){
+    platforms.forEach(function(p){
       var item = document.createElement("div"); item.className = "litem";
       item.innerHTML = '<span class="ldot" style="background:'+PLATFORM_COLOR[p]+'"></span>'+PLATFORM_LABEL[p];
       legend.appendChild(item);
@@ -1199,6 +1235,65 @@
         var span = document.createElement("span"); span.textContent = m; labels.appendChild(span);
       }
     });
+
+    // Cache dipakai handler hover (lihat setupTrendHover) supaya nggak perlu hitung ulang tiap gerakan mouse.
+    state.trendCache = { tMonths:tMonths, platforms:platforms, seriesData:seriesData, seriesTrx:seriesTrx, max:max, w:w, h:h, pad:pad, padTop:padTop, stepX:stepX };
+    var tooltip = document.getElementById("trendTooltip");
+    if(tooltip) tooltip.style.display = "none";
+  }
+
+  // ---------------- hover chart tren ----------------
+  function setupTrendHover(){
+    var svg = document.getElementById("trendSvg");
+    var tooltip = document.getElementById("trendTooltip");
+    if(!svg || !tooltip) return;
+
+    function hideHover(){
+      tooltip.style.display = "none";
+      var g = document.getElementById("trendHoverLayer");
+      if(g) g.innerHTML = "";
+    }
+
+    function moveHover(clientX, clientY){
+      var c = state.trendCache;
+      if(!c || !c.tMonths || c.tMonths.length===0){ hideHover(); return; }
+      var rect = svg.getBoundingClientRect();
+      if(rect.width===0 || rect.height===0) return;
+      var scaleX = c.w / rect.width;
+      var relX = (clientX - rect.left) * scaleX;
+      var idx = Math.round((relX - c.pad) / c.stepX);
+      idx = Math.max(0, Math.min(c.tMonths.length-1, idx));
+
+      var gx = c.pad + idx*c.stepX;
+      var g = document.getElementById("trendHoverLayer");
+      if(!g) return;
+      var layerHtml = '<line x1="'+gx.toFixed(1)+'" y1="'+c.padTop+'" x2="'+gx.toFixed(1)+'" y2="'+(c.h-c.pad)+'" stroke="#15182B" stroke-opacity="0.18" stroke-width="1.5"/>';
+      c.platforms.forEach(function(p){
+        var v = c.seriesData[p][idx];
+        var y = c.h-c.pad - (v/c.max)*(c.h-c.pad-c.padTop);
+        layerHtml += '<circle cx="'+gx.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="5.5" fill="'+PLATFORM_COLOR[p]+'" stroke="#fff" stroke-width="2"/>';
+      });
+      g.innerHTML = layerHtml;
+
+      var order = c.platforms.slice().sort(function(a,b){ return c.seriesData[b][idx]-c.seriesData[a][idx]; });
+      var rowsHtml = order.map(function(p){
+        return '<div class="tt-row"><span class="tt-name"><span class="tt-dot" style="background:'+PLATFORM_COLOR[p]+'"></span>'+PLATFORM_LABEL[p]+'</span>'+
+          '<span class="tt-vals">'+fmtRp(c.seriesData[p][idx])+'<span class="tt-trx">· '+fmtNum(c.seriesTrx[p][idx])+' trx</span></span></div>';
+      }).join("");
+      tooltip.innerHTML = '<div class="tt-month">'+c.tMonths[idx]+'</div>'+rowsHtml;
+      tooltip.style.display = "block";
+
+      var pxX = gx / scaleX;
+      var clampedX = Math.max(50, Math.min(rect.width-50, pxX));
+      tooltip.style.left = clampedX.toFixed(0) + "px";
+    }
+
+    svg.addEventListener("mousemove", function(evt){ moveHover(evt.clientX, evt.clientY); });
+    svg.addEventListener("mouseleave", hideHover);
+    svg.addEventListener("touchmove", function(evt){
+      if(evt.touches && evt.touches[0]){ moveHover(evt.touches[0].clientX, evt.touches[0].clientY); evt.preventDefault(); }
+    }, {passive:false});
+    svg.addEventListener("touchend", hideHover);
   }
 
   function computeKacabRows(){
@@ -1284,10 +1379,10 @@
     var stores = filteredStores();
     return stores.map(function(s){
       var mix = {}; var sales=0, trx=0, offlineSales=0;
-      ONLINE_PLATFORMS.forEach(function(p){ mix[p]=0; });
+      activePlatforms().forEach(function(p){ mix[p]=0; });
       months.forEach(function(month){
         var m = s.months[month] || {platforms:{}};
-        ONLINE_PLATFORMS.forEach(function(p){
+        activePlatforms().forEach(function(p){
           var v = (m.platforms[p]||{sales:0,not:0});
           mix[p] += v.sales; sales += v.sales; trx += v.not;
         });
@@ -1298,7 +1393,7 @@
         var prevSales = 0;
         prevMonths.forEach(function(month){
           var m = s.months[month] || {platforms:{}};
-          ONLINE_PLATFORMS.forEach(function(p){ prevSales += (m.platforms[p]||{sales:0}).sales; });
+          activePlatforms().forEach(function(p){ prevSales += (m.platforms[p]||{sales:0}).sales; });
         });
         growth = prevSales>0 ? ((sales-prevSales)/prevSales*100) : (sales>0 ? null : 0); // null = baru (dari 0)
       }
@@ -1322,10 +1417,10 @@
       return;
     }
     rows.forEach(function(r){
-      var total = ONLINE_PLATFORMS.reduce(function(a,p){return a+r.mix[p];},0);
+      var total = activePlatforms().reduce(function(a,p){return a+r.mix[p];},0);
       var mixHtml = '<div class="mix-bar">';
       if(total>0){
-        ONLINE_PLATFORMS.forEach(function(p){
+        activePlatforms().forEach(function(p){
           var w = r.mix[p]/total*100;
           if(w>0) mixHtml += '<span style="width:'+w.toFixed(1)+'%;background:'+PLATFORM_COLOR[p]+'" title="'+PLATFORM_LABEL[p]+': '+fmtRp(r.mix[p])+'"></span>';
         });
@@ -1462,10 +1557,11 @@
   document.getElementById("fYear").addEventListener("change", function(e){ state.filters.year = e.target.value; renderAll(); });
   document.getElementById("fKacab").addEventListener("change", function(e){ state.filters.kacab = e.target.value; renderAll(); });
   document.getElementById("fArea").addEventListener("change", function(e){ state.filters.area = e.target.value; renderAll(); });
+  document.getElementById("fPlatform").addEventListener("change", function(e){ state.filters.platform = e.target.value; renderAll(); });
   document.getElementById("fSearch").addEventListener("input", function(e){ state.filters.search = e.target.value; renderKacabTable(); renderGeraiTable(); });
   document.getElementById("resetBtn").addEventListener("click", function(){
-    state.filters.kacab=""; state.filters.area=""; state.filters.search="";
-    document.getElementById("fKacab").value=""; document.getElementById("fArea").value=""; document.getElementById("fSearch").value="";
+    state.filters.kacab=""; state.filters.area=""; state.filters.search=""; state.filters.platform="";
+    document.getElementById("fKacab").value=""; document.getElementById("fArea").value=""; document.getElementById("fSearch").value=""; document.getElementById("fPlatform").value="";
     renderAll();
   });
 
@@ -1568,6 +1664,7 @@
       }
     }
   }
+  setupTrendHover();
   init();
 })();
 </script>

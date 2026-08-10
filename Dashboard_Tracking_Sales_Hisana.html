@@ -1087,8 +1087,8 @@ body {
 
 <div id="main">
   <div id="topbar">
-    <button class="tab-btn" data-tab="overview">🏠 Overview</button>
-    <button class="tab-btn active" data-tab="harian">📅 Per Hari</button>
+    <button class="tab-btn active" data-tab="overview">🏠 Overview</button>
+    <button class="tab-btn" data-tab="harian">📅 Per Hari</button>
     <button class="tab-btn" data-tab="bulanan">📆 Per Bulan</button>
     <button class="tab-btn" data-tab="tahunan">📊 Per Tahun</button>
     <button class="tab-btn" data-tab="pola">📅 Pola &amp; Libur</button>
@@ -1108,19 +1108,19 @@ body {
 
   <div id="content">
     <!-- Overview Tab -->
-    <div id="tab-overview" class="tab-content" style="display: none;">
+    <div id="tab-overview" class="tab-content" style="">
       <!-- Partial year banner (hidden by default, shown when 2026 data exists) -->
       <div class="ov-partial-banner" id="ov-partial-banner" style="display: flex;">
         ⚠️ <span id="ov-partial-text">Data 2026 tersedia s/d Agt 2026 — perbandingan YoY menggunakan periode Jan–Agt (apple-to-apple).</span>
       </div>
 
       <!-- KPI Row 1: Aggregate metrics -->
-      <div class="ov-section-title">📊 KPI Keseluruhan — Semua Gerai</div>
+      <div class="ov-section-title" id="ov-scope-title">📊 KPI Keseluruhan — Semua Gerai (166 gerai)</div>
       <div class="ov-kpi-grid" id="ov-kpi-grid">
         <div class="ov-kpi-card blue"><div class="ov-kpi-label">Total Gerai Aktif</div><div class="ov-kpi-value" id="ov-total-gerai">166</div><div class="ov-kpi-sub" id="ov-gerai-sub">dari 166 gerai total · data s/d Agt 2026</div></div>
-        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Total Omset YTD 2026</div><div class="ov-kpi-value" id="ov-omset-ytd">Rp 98.1M</div><div class="ov-kpi-badge down" id="ov-omset-ytd-badge">▼ 17.3% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-omset-ytd-note">Jan–Agt 2026</div></div>
-        <div class="ov-kpi-card purple"><div class="ov-kpi-label">Total NOT YTD 2026</div><div class="ov-kpi-value" id="ov-not-ytd">3.658.242 trx</div><div class="ov-kpi-badge down" id="ov-not-ytd-badge">▼ 14.9% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-not-ytd-note">Jan–Agt 2026</div></div>
-        <div class="ov-kpi-card green"><div class="ov-kpi-label">VOT Rata-rata 2026</div><div class="ov-kpi-value" id="ov-vot-2026">Rp 26.804/trx</div><div class="ov-kpi-badge down" id="ov-vot-badge">▼ 2.7% vs YTD 2025</div><div class="ov-kpi-sub">vs rata-rata 2025</div></div>
+        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Total Omset YTD 2026</div><div class="ov-kpi-value" id="ov-omset-ytd">Rp 99.6M</div><div class="ov-kpi-badge down" id="ov-omset-ytd-badge">▼ 16.0% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-omset-ytd-note">Jan–Agt 2026</div></div>
+        <div class="ov-kpi-card purple"><div class="ov-kpi-label">Total NOT YTD 2026</div><div class="ov-kpi-value" id="ov-not-ytd">3.711.979 trx</div><div class="ov-kpi-badge down" id="ov-not-ytd-badge">▼ 13.7% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-not-ytd-note">Jan–Agt 2026</div></div>
+        <div class="ov-kpi-card green"><div class="ov-kpi-label">VOT Rata-rata 2026</div><div class="ov-kpi-value" id="ov-vot-2026">Rp 26.823/trx</div><div class="ov-kpi-badge down" id="ov-vot-badge">▼ 2.7% vs YTD 2025</div><div class="ov-kpi-sub">vs rata-rata 2025</div></div>
       </div>
 
       
@@ -1129,7 +1129,7 @@ body {
         <div class="ov-kpi-card blue" style="opacity:0.7"><div class="ov-kpi-label">Omset Full Year 2023</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2023">Rp 161.7M</div></div>
         <div class="ov-kpi-card blue" style="opacity:0.8"><div class="ov-kpi-label">Omset Full Year 2024</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2024">Rp 181.2M</div><div class="ov-kpi-badge up" id="ov-om-2024-badge">▲ 12.0% vs 2023</div></div>
         <div class="ov-kpi-card blue" style="opacity:0.9"><div class="ov-kpi-label">Omset Full Year 2025</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2025">Rp 174.8M</div><div class="ov-kpi-badge down" id="ov-om-2025-badge">▼ 3.5% vs 2024</div></div>
-        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Omset YTD 2026</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2026">Rp 98.1M</div><div class="ov-kpi-badge down" id="ov-om-2026-badge">▼ 17.3% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-om-2026-note">Jan–Agt 2026</div></div>
+        <div class="ov-kpi-card orange"><div class="ov-kpi-label">Omset YTD 2026</div><div class="ov-kpi-value" style="font-size:16px" id="ov-om-2026">Rp 99.6M</div><div class="ov-kpi-badge down" id="ov-om-2026-badge">▼ 16.0% vs periode sama 2025</div><div class="ov-ytd-note" id="ov-om-2026-note">Jan–Agt 2026</div></div>
       </div>
 
       <!-- Two col: Top Gerai + Alerts -->
@@ -1144,62 +1144,62 @@ body {
       <td><span class="rank">#1</span></td>
       <td style="font-weight:500">HASANA 05</td>
       <td style="color:var(--muted);font-size:11px">JOHAN</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 2.4M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 17.3%</span></td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 2.5M</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 16.0%</span></td>
     </tr><tr>
       <td><span class="rank">#2</span></td>
       <td style="font-weight:500">JAFAR BIN ABI THOLIB</td>
       <td style="color:var(--muted);font-size:11px">IRWANTO</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.8M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 1.3%</span></td>
+      <td class="num"><span class="ov-trend-spark up">▲ 0.4%</span></td>
     </tr><tr>
       <td><span class="rank">#3</span></td>
       <td style="font-weight:500">ABU BAKAR</td>
       <td style="color:var(--muted);font-size:11px">MUJIB</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.7M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 29.0%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 28.0%</span></td>
     </tr><tr>
       <td><span class="rank">#4</span></td>
       <td style="font-weight:500">ABU DZAR AL GHIFARI</td>
       <td style="color:var(--muted);font-size:11px">FARID</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.5M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 21.6%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 20.0%</span></td>
     </tr><tr>
       <td><span class="rank">#5</span></td>
       <td style="font-weight:500">SABRA BIN MABAD</td>
       <td style="color:var(--muted);font-size:11px">NANDA</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.3M</td>
-      <td class="num"><span class="ov-trend-spark up">▲ 0.5%</span></td>
+      <td class="num"><span class="ov-trend-spark up">▲ 1.6%</span></td>
     </tr><tr>
       <td><span class="rank">#6</span></td>
       <td style="font-weight:500">MUAWIYAH BIN MUAWIYAH</td>
       <td style="color:var(--muted);font-size:11px">ANGGIL</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.2M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 6.8%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 5.3%</span></td>
     </tr><tr>
       <td><span class="rank">#7</span></td>
       <td style="font-weight:500">KULTSUM BIN HIKAM RA</td>
       <td style="color:var(--muted);font-size:11px">ARI</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.2M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 12.8%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 11.5%</span></td>
     </tr><tr>
       <td><span class="rank">#8</span></td>
       <td style="font-weight:500">ABUBAKAR ASSIDDIQ</td>
       <td style="color:var(--muted);font-size:11px">MUKHLIS</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.1M</td>
-      <td class="num"><span class="ov-trend-spark up">▲ 45.7%</span></td>
+      <td class="num"><span class="ov-trend-spark up">▲ 48.0%</span></td>
     </tr><tr>
       <td><span class="rank">#9</span></td>
       <td style="font-weight:500">HASANA 02</td>
       <td style="color:var(--muted);font-size:11px">MAKHRUS</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.1M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 20.3%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 18.9%</span></td>
     </tr><tr>
       <td><span class="rank">#10</span></td>
       <td style="font-weight:500">ABU DARDA</td>
       <td style="color:var(--muted);font-size:11px">FARID</td>
       <td class="num" style="font-weight:600;color:#fb923c">Rp 1.0M</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 19.4%</span></td>
+      <td class="num"><span class="ov-trend-spark down">▼ 18.2%</span></td>
     </tr></tbody>
             </table>
           </div>
@@ -1211,37 +1211,37 @@ body {
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>UMAIR BIN WAHAB</strong> <span style="opacity:0.7;font-size:11px">NANDA</span><br>
-          NOT ▼ 53.1% · 12.788 trx (was 27.274)
+          NOT ▼ 52.6% · 12.931 trx (was 27.274)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>ABU MUJTABA</strong> <span style="opacity:0.7;font-size:11px">ANGGIL</span><br>
-          NOT ▼ 48.5% · 9.198 trx (was 17.860)
+          NOT ▼ 47.9% · 9.304 trx (was 17.860)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>KARIM BIN HAZM</strong> <span style="opacity:0.7;font-size:11px">PUTRA</span><br>
-          NOT ▼ 48.2% · 20.867 trx (was 40.265)
+          NOT ▼ 47.6% · 21.095 trx (was 40.265)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>YALA BIN MURRAH</strong> <span style="opacity:0.7;font-size:11px">ANWAR</span><br>
-          NOT ▼ 46.1% · 11.884 trx (was 22.065)
+          NOT ▼ 45.2% · 12.086 trx (was 22.065)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>DZIL JAUZAN ADH DIBABI</strong> <span style="opacity:0.7;font-size:11px">ARI</span><br>
-          NOT ▼ 44.0% · 12.106 trx (was 21.613)
+          NOT ▼ 43.4% · 12.233 trx (was 21.613)
         </div>
       </div><div class="ov-alert-item danger">
         <span class="ov-alert-icon">🔴</span>
         <div>
           <strong>SYURAIH BIN HANI</strong> <span style="opacity:0.7;font-size:11px">PUTRA</span><br>
-          NOT ▼ 43.1% · 10.823 trx (was 19.030)
+          NOT ▼ 42.5% · 10.939 trx (was 19.030)
         </div>
       </div></div>
           <div style="margin-top:16px">
@@ -1252,28 +1252,28 @@ body {
                 <tbody><tr>
       <td><span class="rank">#1</span></td>
       <td style="font-weight:500">NUAIMAN BIN UMAR AL ASHARY <span style="font-size:10px;color:var(--muted)">YUNUS</span></td>
-      <td class="num">8.327 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 32.9%</span></td>
+      <td class="num">8.665 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 30.1%</span></td>
     </tr><tr>
       <td><span class="rank">#2</span></td>
       <td style="font-weight:500">FUDHOIL BIN IYADH <span style="font-size:10px;color:var(--muted)">JOHAN</span></td>
-      <td class="num">8.718 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 30.2%</span></td>
+      <td class="num">8.829 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 29.3%</span></td>
     </tr><tr>
       <td><span class="rank">#3</span></td>
       <td style="font-weight:500">ABU SAID AL KHUDRY <span style="font-size:10px;color:var(--muted)">RAFIQ</span></td>
-      <td class="num">9.103 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 36.1%</span></td>
+      <td class="num">9.220 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 35.2%</span></td>
     </tr><tr>
       <td><span class="rank">#4</span></td>
       <td style="font-weight:500">MUNDZIR BIN AMR <span style="font-size:10px;color:var(--muted)">NANDA</span></td>
-      <td class="num">9.136 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 10.3%</span></td>
+      <td class="num">9.285 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 8.8%</span></td>
     </tr><tr>
       <td><span class="rank">#5</span></td>
       <td style="font-weight:500">ABU MUJTABA <span style="font-size:10px;color:var(--muted)">ANGGIL</span></td>
-      <td class="num">9.198 trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 48.5%</span></td>
+      <td class="num">9.304 trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 47.9%</span></td>
     </tr></tbody>
               </table>
             </div>
@@ -1291,35 +1291,35 @@ body {
             <tbody><tr>
       <td style="font-weight:600">SURABAYA</td>
       <td class="num">63</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 39.1M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 39.7M</td>
       <td class="num">39.8%</td>
-      <td class="num">1.417.915 trx</td>
-      <td class="num">Rp 27.549/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 20.4%</span></td>
+      <td class="num">1.438.467 trx</td>
+      <td class="num">Rp 27.567/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 19.2%</span></td>
     </tr><tr>
       <td style="font-weight:600">SIDOARJO</td>
       <td class="num">59</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 34.8M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 35.3M</td>
       <td class="num">35.5%</td>
-      <td class="num">1.346.057 trx</td>
-      <td class="num">Rp 25.849/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 16.4%</span></td>
+      <td class="num">1.366.041 trx</td>
+      <td class="num">Rp 25.873/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 15.1%</span></td>
     </tr><tr>
       <td style="font-weight:600">MOGRES</td>
       <td class="num">37</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 20.3M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 20.6M</td>
       <td class="num">20.7%</td>
-      <td class="num">756.879 trx</td>
-      <td class="num">Rp 26.778/trx</td>
-      <td class="num"><span class="ov-trend-spark down">▼ 19.4%</span></td>
+      <td class="num">767.842 trx</td>
+      <td class="num">Rp 26.788/trx</td>
+      <td class="num"><span class="ov-trend-spark down">▼ 18.2%</span></td>
     </tr><tr>
       <td style="font-weight:600">LATUBOMASO</td>
       <td class="num">7</td>
-      <td class="num" style="font-weight:600;color:#fb923c">Rp 3.9M</td>
+      <td class="num" style="font-weight:600;color:#fb923c">Rp 4.0M</td>
       <td class="num">4.0%</td>
-      <td class="num">137.391 trx</td>
-      <td class="num">Rp 28.616/trx</td>
-      <td class="num"><span class="ov-trend-spark up">▲ 48.2%</span></td>
+      <td class="num">139.629 trx</td>
+      <td class="num">Rp 28.645/trx</td>
+      <td class="num"><span class="ov-trend-spark up">▲ 50.8%</span></td>
     </tr></tbody>
           </table>
         </div>
@@ -1327,7 +1327,7 @@ body {
     </div>
 
     <!-- Harian Tab -->
-    <div id="tab-harian" class="tab-content" style="">
+    <div id="tab-harian" class="tab-content" style="display: none;">
       <div class="controls-row">
         <div class="ctrl-group">
           <label>Metrik</label>
@@ -1355,13 +1355,6 @@ body {
           <select id="chart-type">
             <option value="line">Line Chart</option>
             <option value="bar">Bar Chart</option>
-          </select>
-        </div>
-        <div class="ctrl-group">
-          <label>Cakupan Data</label>
-          <select id="harian-scope">
-            <option value="all">Semua Gerai (Jaringan)</option>
-            <option value="selected">Gerai Terpilih Saja</option>
           </select>
         </div>
       </div>
@@ -1394,7 +1387,7 @@ body {
         <div class="chart-title" id="harian-chart-title">Omset Harian — Perbandingan Tahunan</div>
         <div class="chart-sub" id="harian-subtitle">[OMSET] Semua Gerai (166 gerai) · Semua Bulan · 366 hari</div>
         <div class="chart-wrap">
-          <canvas id="chart-harian" style="box-sizing: border-box; display: block; height: 320px; width: 521px;" width="521" height="320"></canvas>
+          <canvas id="chart-harian" style="box-sizing: border-box; display: block; height: 320px; width: 1483px;" width="1483" height="320"></canvas>
         </div>
       </div>
       <div class="chart-card">
@@ -1428,13 +1421,6 @@ body {
           <select id="chart-type-bulanan">
             <option value="bar">Bar Chart</option>
             <option value="line">Line Chart</option>
-          </select>
-        </div>
-        <div class="ctrl-group">
-          <label>Cakupan Data</label>
-          <select id="bulanan-scope">
-            <option value="all">Semua Gerai (Jaringan)</option>
-            <option value="selected">Gerai Terpilih Saja</option>
           </select>
         </div>
       </div>
@@ -1493,13 +1479,6 @@ body {
             <option value="omset">Omset (Rp)</option>
             <option value="not">NOT (Jumlah Transaksi)</option>
             <option value="vot">VOT (Rp/transaksi)</option>
-          </select>
-        </div>
-        <div class="ctrl-group">
-          <label>Cakupan Data</label>
-          <select id="tahunan-scope">
-            <option value="all">Semua Gerai (Jaringan)</option>
-            <option value="selected">Gerai Terpilih Saja</option>
           </select>
         </div>
       </div>
@@ -1573,13 +1552,6 @@ body {
         <option value="omset">Omset (Rp)</option>
         <option value="not">NOT (Transaksi)</option>
         <option value="vot">VOT (Rp/transaksi)</option>
-      </select>
-    </div>
-    <div class="ctrl-group">
-      <label>Cakupan Data</label>
-      <select id="pola-scope">
-        <option value="all">Semua Gerai (Jaringan)</option>
-        <option value="selected">Gerai Terpilih Saja</option>
       </select>
     </div>
     <div class="ctrl-group">
@@ -2588,9 +2560,16 @@ function toggleStore(id) {
 document.getElementById('sel-area').addEventListener('change', () => {
   updateKacabFilter();
   renderStoreList();
+  refreshActiveTab();
 });
-document.getElementById('sel-kacab').addEventListener('change', () => renderStoreList());
-document.getElementById('store-search').addEventListener('input', () => renderStoreList());
+document.getElementById('sel-kacab').addEventListener('change', () => {
+  renderStoreList();
+  refreshActiveTab();
+});
+document.getElementById('store-search').addEventListener('input', () => {
+  renderStoreList();
+  refreshActiveTab();
+});
 document.getElementById('btn-clear-stores').addEventListener('click', () => {
   selectedStores.clear();
   renderStoreList();
@@ -2648,6 +2627,31 @@ function getSelectedStoreData() {
   return [...selectedStores].map(id => currentData.find(s => s.id === id)).filter(Boolean);
 }
 
+// ============================================================
+// SCOPE OTOMATIS — mengikuti filter sidebar (Area/Kacab/Gerai)
+// Tidak ada lagi dropdown "Cakupan Data" manual per tab.
+// Jika ada gerai yang dicentang di sidebar → pakai gerai terpilih.
+// Jika tidak → pakai hasil filter Area/Kacab (atau semua gerai kalau filter kosong).
+// ============================================================
+function getScopeStores() {
+  return selectedStores.size > 0 ? getSelectedStoreData() : getFilteredStores();
+}
+
+function getScopeMode() {
+  return selectedStores.size > 0 ? 'selected' : 'all';
+}
+
+function getScopeLabel(stores) {
+  if (selectedStores.size > 0) {
+    return stores.length === 1 ? stores[0].store : `${stores.length} gerai terpilih`;
+  }
+  const area = document.getElementById('sel-area').value;
+  const kacab = document.getElementById('sel-kacab').value;
+  if (kacab) return `Kacab ${kacab} (${stores.length} gerai)`;
+  if (area) return `Area ${area} (${stores.length} gerai)`;
+  return `Semua Gerai (${stores.length} gerai)`;
+}
+
 function getHarianGroups() {
   const stores = getSelectedStoreData();
   if (!stores.length) return null;
@@ -2683,16 +2687,15 @@ function getDailyVal(stores, year, ddmm, metric) {
 }
 
 function renderHarian() {
-  const harianScope = document.getElementById('harian-scope') ? document.getElementById('harian-scope').value : 'selected';
-  const harianStores = harianScope === 'all' ? currentData : getSelectedStoreData();
+  const harianStores = getScopeStores();
   if (!harianStores || !harianStores.length) {
-    document.getElementById('harian-subtitle').textContent = harianScope === 'all' ? 'Tidak ada data' : 'Pilih minimal 1 gerai dari sidebar';
+    document.getElementById('harian-subtitle').textContent = 'Tidak ada gerai pada filter ini';
     if (chartHarian) { chartHarian.destroy(); chartHarian = null; }
     clearSummary('harian-summary');
     clearTable('tbl-harian');
     return;
   }
-  const harianLabel = harianScope === 'all' ? `Semua Gerai (${harianStores.length} gerai)` : (harianStores.length === 1 ? harianStores[0].store : `${harianStores.length} gerai terpilih`);
+  const harianLabel = getScopeLabel(harianStores);
   const groups = [{ label: harianLabel, stores: harianStores }];
   const monthFilter = document.getElementById('harian-month').value;
   const type = document.getElementById('chart-type').value;
@@ -2930,7 +2933,6 @@ document.getElementById('harian-metric').addEventListener('change', () => { if (
 
 document.getElementById('harian-month').addEventListener('change', () => { if (activeTab==='harian') renderHarian(); });
 document.getElementById('chart-type').addEventListener('change', () => { if (activeTab==='harian') renderHarian(); });
-document.getElementById('harian-scope').addEventListener('change', () => { if (activeTab==='harian') renderHarian(); });
 
 function chartOptions(tab, count) {
   return {
@@ -3002,15 +3004,14 @@ function renderBulananYoY() {
   // x-axis: Jan, Feb, ..., Des
   // dataset per year (2023, 2024, 2025, 2026)
 
-  const bulananScope = document.getElementById('bulanan-scope') ? document.getElementById('bulanan-scope').value : 'selected';
-  const stores = bulananScope === 'all' ? currentData : getSelectedStoreData();
+  const stores = getScopeStores();
   if (!stores.length) {
-    document.getElementById('bulanan-subtitle').textContent = bulananScope === 'all' ? 'Tidak ada data' : 'Pilih minimal 1 gerai dari sidebar';
+    document.getElementById('bulanan-subtitle').textContent = 'Tidak ada gerai pada filter ini';
     if (chartBulanan) { chartBulanan.destroy(); chartBulanan = null; }
     clearSummary('bulanan-summary'); clearTable('tbl-bulanan');
     return;
   }
-  const bulananLabel = bulananScope === 'all' ? `Semua Gerai (${stores.length} gerai)` : (stores.length === 1 ? stores[0].store : `${stores.length} gerai terpilih`);
+  const bulananLabel = getScopeLabel(stores);
   const groups = [{ label: bulananLabel, stores }];
 
   // For each group, compute monthly totals per year
@@ -3211,7 +3212,7 @@ document.getElementById('chart-type-bulanan').addEventListener('change', () => {
 let chartTahunan = null;
 
 function renderTahunan() {
-  const tahunanScope = document.getElementById('tahunan-scope') ? document.getElementById('tahunan-scope').value : 'selected';
+  const tahunanScope = getScopeMode();
   const metric = document.getElementById('tahunan-metric').value;
   const years = ['2023','2024','2025','2026'];
   const TCOLS = ['#38bdf8','#fb923c','#a78bfa','#34d399'];
@@ -3219,7 +3220,7 @@ function renderTahunan() {
   let datasets = [], labels = [];
 
   if (tahunanScope === 'selected') {
-    const stores = getSelectedStoreData();
+    const stores = getScopeStores();
     if (!stores.length) {
       document.getElementById('tahunan-subtitle').textContent = 'Pilih minimal 1 gerai dari sidebar';
       if (chartTahunan) { chartTahunan.destroy(); chartTahunan = null; }
@@ -3237,18 +3238,23 @@ function renderTahunan() {
       `${stores.length} gerai · ${metricLabel(metric)} · 2023–2026`;
 
   } else {
-    // All stores: group by year, show total per year as single bar chart
-    const allStores = currentData;
+    // Area/Kacab (atau semua): group by year, show total per year as single bar chart
+    const allStores = getScopeStores();
+    if (!allStores.length) {
+      document.getElementById('tahunan-subtitle').textContent = 'Tidak ada gerai pada filter ini';
+      if (chartTahunan) { chartTahunan.destroy(); chartTahunan = null; }
+      return;
+    }
     labels = years;
     datasets = [{
-      label: `Semua Gerai (${allStores.length})`,
+      label: getScopeLabel(allStores),
       data: years.map(yr => allStores.reduce((sum, s) => sum + getMetricYearlyVal(s, yr, metric), 0)),
       backgroundColor: years.map((_, i) => TCOLS[i] + 'cc'),
       borderColor: years.map((_, i) => TCOLS[i]),
       borderWidth: 2, borderRadius: 4,
     }];
     document.getElementById('tahunan-subtitle').textContent =
-      `Semua ${allStores.length} gerai · ${metricLabel(metric)} · 2023–2026`;
+      `${getScopeLabel(allStores)} · ${metricLabel(metric)} · 2023–2026`;
   }
 
   const ctx = document.getElementById('chart-tahunan').getContext('2d');
@@ -3282,7 +3288,7 @@ function renderTahunanTable(mode, labels, years, datasets, metric='omset') {
   const thead = tbl.querySelector('thead tr');
   const tbody = tbl.querySelector('tbody');
 
-  // 'all' scope: table shows year totals (simple row per year), not per-store
+  // scope 'all' (area/kacab/semua): table shows year totals (simple row per year), not per-store
   if (mode === 'all') {
     thead.innerHTML = '<th>Tahun</th><th>Total</th><th>Bar</th>';
     const vals = years.map((yr, yi) => ({ yr, val: datasets[0].data[yi] || 0 }));
@@ -3298,7 +3304,7 @@ function renderTahunanTable(mode, labels, years, datasets, metric='omset') {
     return;
   }
 
-  const colLabel = {selected:'Gerai', area:'Area'}[mode] || 'Gerai';
+  const colLabel = 'Gerai';
   thead.innerHTML = `<th>${colLabel}</th>` + years.map(y => `<th>${y}</th>`).join('') + '<th>Total</th><th>Bar</th>';
   
   // Untuk VOT: tidak bisa dijumlah antar tahun — sort pakai nilai tahun terakhir
@@ -3348,8 +3354,7 @@ function renderTahunanSummary(mode, labels, years, datasets, metric='omset') {
   const yearTotals = years.map((yr, yi) => {
     if (isVotS) {
       // Untuk VOT: ambil dari scope-aware stores
-      const tScope = document.getElementById('tahunan-scope') ? document.getElementById('tahunan-scope').value : 'selected';
-      const selStores = tScope === 'all' ? currentData : getSelectedStoreData();
+      const selStores = getScopeStores();
       const o = selStores.reduce((a,s) => a + (s.yearly[yr] || 0), 0);
       const n = selStores.reduce((a,s) => a + (s.yearly_not ? (s.yearly_not[yr] || 0) : 0), 0);
       return { yr, total: (o > 0 && n > 0) ? Math.round(o / n) : 0 };
@@ -3363,7 +3368,7 @@ function renderTahunanSummary(mode, labels, years, datasets, metric='omset') {
     <div class="sum-card" style="border-left:3px solid ${colors[i]}">
       <div class="s-label">${metricLabel(metric)} ${t.yr}</div>
       <div class="s-value" style="font-size:18px">${fmtMetric(t.total, metric)}</div>
-      <div class="s-store">${mode === 'selected' ? 'Gerai terpilih' : 'Semua gerai'}</div>
+      <div class="s-store">${mode === 'selected' ? 'Gerai terpilih' : getScopeLabel(getScopeStores())}</div>
     </div>
   `).join('');
 }
@@ -3385,6 +3390,12 @@ function getYTDKeys(year, refYear) {
 
 function renderOverview() {
   if (!currentData || !currentData.length) return;
+  const scopedData = getScopeStores();
+  document.getElementById('ov-scope-title').textContent = `📊 KPI Keseluruhan — ${getScopeLabel(scopedData)}`;
+  if (!scopedData.length) {
+    document.getElementById('ov-gerai-sub').textContent = 'Tidak ada gerai pada filter ini';
+    return;
+  }
 
   const YEAR_NOW = '2026';
   const YEAR_PREV = '2025';
@@ -3394,13 +3405,13 @@ function renderOverview() {
   // Cari bulan-bulan YTD (data yang ada di 2026)
   // Cek monthly dulu, fallback ke yearly jika monthly kosong
   const ytdMonths = new Set();
-  currentData.forEach(s => {
+  scopedData.forEach(s => {
     Object.keys(s.monthly || {}).forEach(k => { if (k.startsWith(YEAR_NOW+'-')) ytdMonths.add(k.slice(5,7)); });
   });
   const ytdMonthsSorted = [...ytdMonths].sort();
 
   // Cek apakah ada data yearly 2026 (meskipun monthly tidak ada)
-  const hasYearly2026 = currentData.some(s => (s.yearly && s.yearly[YEAR_NOW] > 0));
+  const hasYearly2026 = scopedData.some(s => (s.yearly && s.yearly[YEAR_NOW] > 0));
   // Mode: gunakan monthly jika ada, fallback ke yearly
   const useYearly = ytdMonthsSorted.length === 0 && hasYearly2026;
 
@@ -3426,12 +3437,12 @@ function renderOverview() {
   function sumAllYTD(year, months) {
     let omset = 0, not_ = 0;
     if (useYearly) {
-      currentData.forEach(s => {
+      scopedData.forEach(s => {
         omset += (s.yearly && s.yearly[year]) || 0;
         not_  += (s.yearly_not && s.yearly_not[year]) || 0;
       });
     } else {
-      currentData.forEach(s => {
+      scopedData.forEach(s => {
         months.forEach(m => {
           const key = `${year}-${m}`;
           omset += (s.monthly[key] || 0);
@@ -3446,7 +3457,7 @@ function renderOverview() {
   function sumFullYear(year) {
     let omset = 0, not_ = 0;
     const MONTHS = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-    currentData.forEach(s => {
+    scopedData.forEach(s => {
       // Prefer yearly aggregate if available
       if (s.yearly && s.yearly[year]) {
         omset += s.yearly[year];
@@ -3488,13 +3499,13 @@ function renderOverview() {
   const fy2025  = sumFullYear(YEAR_PREV);
 
   // Gerai aktif (ada data di 2026)
-  const geraAktif = currentData.filter(s => {
+  const geraAktif = scopedData.filter(s => {
     if (useYearly) return (s.yearly && s.yearly[YEAR_NOW] > 0);
     return ytdMonthsSorted.some(m => (s.monthly[`${YEAR_NOW}-${m}`]||0) > 0);
   });
   const MONTH_NAMES_LONG = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
   document.getElementById('ov-total-gerai').textContent = geraAktif.length;
-  document.getElementById('ov-gerai-sub').textContent = `dari ${currentData.length} gerai total · data s/d ${lastMonth ? (MONTH_NAMES_LONG[parseInt(lastMonth)-1]+' 2026') : (useYearly ? 'Des 2026 (yearly)' : '—')}`;
+  document.getElementById('ov-gerai-sub').textContent = `dari ${scopedData.length} gerai total · data s/d ${lastMonth ? (MONTH_NAMES_LONG[parseInt(lastMonth)-1]+' 2026') : (useYearly ? 'Des 2026 (yearly)' : '—')}`;
 
   // KPI omset YTD
   document.getElementById('ov-omset-ytd').textContent = fmtShort(ytdNow.omset);
@@ -3523,7 +3534,7 @@ function renderOverview() {
   document.getElementById('ov-om-2026-note').textContent = document.getElementById('ov-omset-ytd-note').textContent;
 
   // Top 10 gerai by omset YTD 2026
-  const storeRanks = currentData.map(s => {
+  const storeRanks = scopedData.map(s => {
     let omset2026, omset2025, not2026, not2025;
     if (useYearly) {
       omset2026 = (s.yearly && s.yearly[YEAR_NOW]) || 0;
@@ -3598,7 +3609,7 @@ function renderOverview() {
 
   // Area summary
   const areaMap = {};
-  currentData.forEach(s => {
+  scopedData.forEach(s => {
     const area = s.area || 'Lainnya';
     if (!areaMap[area]) areaMap[area] = { gerai: 0, omset2026: 0, omset2025: 0, not2026: 0 };
     areaMap[area].gerai++;
@@ -4077,10 +4088,9 @@ function renderPola() {
   if (!currentData || !currentData.length) return;
 
   const metric   = document.getElementById('pola-metric').value;
-  const scope    = document.getElementById('pola-scope').value;
   const checkedYrs = [...document.querySelectorAll('#pola-year-checks input:checked')].map(c => c.value);
   const years    = checkedYrs.length ? checkedYrs : ['2025'];
-  const stores   = scope === 'selected' ? getSelectedStoreData() : currentData;
+  const stores   = getScopeStores();
   if (!stores.length) return;
 
   // ── 1. Hitung avg per hari-dalam-seminggu per tahun ──────────
@@ -4169,7 +4179,7 @@ function renderPola() {
     }
   });
 
-  const scopeLabel = scope === 'all' ? `${stores.length} gerai (jaringan)` : `${stores.length} gerai terpilih`;
+  const scopeLabel = getScopeLabel(stores);
   const metricLabel2 = metric==='omset'?'omset':metric==='not'?'transaksi':'VOT';
   document.getElementById('pola-dow-sub').textContent =
     `Rata-rata ${metricLabel2} per hari dalam seminggu — ${scopeLabel} · tahun: ${years.join(', ')}`;
@@ -4339,7 +4349,7 @@ function renderPola() {
 
 // Event listeners untuk Pola tab controls
 document.addEventListener('DOMContentLoaded', () => {}, false);
-['pola-metric','pola-scope'].forEach(id => {
+['pola-metric'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('change', () => { if (activeTab==='pola') renderPola(); });
 });

@@ -187,7 +187,7 @@
 <header class="page-head">
   <div class="page-eyebrow">Arsip Bulanan</div>
   <h1>Dashboard Menu — Semua Bulan</h1>
-  <p>Rekap penjualan menu per bulan, seluruh gerai Surabaya Raya. Setiap kartu mengarah ke dashboard lengkap bulan tersebut, tersimpan di GitHub Releases.</p>
+  <p>Rekap penjualan menu per bulan, seluruh gerai Surabaya Raya. Setiap kartu mengarah ke dashboard lengkap bulan tersebut, datanya live dari Google Sheets.</p>
 </header>
 
 <main class="rail-section">
@@ -199,7 +199,7 @@
   <div class="rail">
 
     <!-- ===== AGUSTUS 2026 ===== -->
-    <a href="https://github.com/radendharu-arch/Hisana-Surabaya-Raya-Reports/releases/download/data-agustus-2026/Dashboard.Menu.Agustus.26.html" target="_blank" rel="noopener">
+    <a href="dashboard.html?tahun=2026&bulan=8" target="_blank" rel="noopener">
       <div class="ticket" style="--card-accent:var(--gold-deep);">
         <div class="ticket-accent"></div>
         <div class="ticket-row">
@@ -215,7 +215,7 @@
         <div class="tear"></div>
         <div class="ticket-tags"><span>Agustus</span><span>Menu</span></div>
         <div class="ticket-foot">
-          <span class="ticket-stamp">Rilis &middot; data-agustus-2026</span>
+          <span class="ticket-stamp">File &middot; dashboard.html</span>
           <span class="cta">Buka<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
         </div>
       </div>
@@ -223,14 +223,19 @@
 
     <!--
     ===== TEMPLATE UNTUK BULAN BERIKUTNYA =====
-    Salin blok <a>...</a> di atas, lalu ganti bagian ini setiap bulan:
-      1. href           -> link Release bulan baru (tag beda, misal data-september-2026)
-      2. ticket-no       -> nomor urut (09, 10, dst)
+    dashboard.html sekarang 1 file untuk semua bulan (datanya live dari
+    Google Sheets), tapi tiap kartu di sini tetap deep-link ke bulan
+    spesifik lewat URL, supaya kartu "Agustus" selalu buka Agustus meski
+    bulan lain sudah ditambahkan. Salin blok <a>...</a> di atas, lalu ganti:
+      1. href           -> dashboard.html?tahun=2026&bulan=9 (angka bulan, bukan nama)
+      2. ticket-no       -> nomor urut bulan (09, 10, dst)
       3. ticket-cat      -> nama bulan + tahun
       4. ticket-title    -> "Dashboard Menu <Bulan>"
       5. ticket-tags     -> nama bulan
-      6. ticket-stamp    -> nama tag release
+    (ticket-stamp bisa tetap "File · dashboard.html" untuk semua kartu)
     Lalu update angka di <span class="rail-count"> di atas.
+    Syarat: data bulan itu sudah diimpor ke Google Sheets lewat menu
+    "POS Dashboard -> Import Bulan dari Drive" di spreadsheet Config.
     -->
 
   </div>

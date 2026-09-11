@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Terlaris — Dashboard POS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EA; --paper-dim:#EFE9DA; --ink:#221D18; --ink-soft:#6B6152;
+    --line:#D9D0BC; --chili:#C1401F; --chili-dim:#F0DAD2; --amber:#D99A2B;
+    --leaf:#5C7A5A; --leaf-dim:#DEE7DC;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--paper-dim); color:var(--ink); font-family:'IBM Plex Mono', monospace; -webkit-font-smoothing:antialiased; padding:32px 16px 80px; }
+  h1,h2,h3{ font-family:'Barlow Condensed', sans-serif; margin:0; letter-spacing:0.01em; }
+  .ticket{ max-width:960px; margin:0 auto; background:var(--paper); border:1px solid var(--line); box-shadow:0 1px 0 var(--line), 0 18px 40px -28px rgba(34,29,24,0.45); position:relative; }
+  .head{ padding:34px 36px 26px; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; }
+  .head .brand{ font-size:14px; letter-spacing:0.14em; color:var(--ink-soft); margin-bottom:6px; }
+  .head h1{ font-size:44px; font-weight:700; line-height:0.95; color:var(--ink); }
+  .head .sub{ font-size:13px; color:var(--ink-soft); margin-top:8px; }
+  .head .stamp{ text-align:right; font-size:12px; color:var(--ink-soft); line-height:1.7; }
+  .head .stamp b{ color:var(--ink); font-weight:600; }
+  .statusbar{ padding:14px 36px; background:var(--leaf-dim); border-bottom:1px dashed var(--line); font-size:11.5px; color:var(--ink-soft); }
+  .statusbar b{ color:var(--ink); }
+  .statusbar.err{ background:var(--chili-dim); color:var(--chili); }
+  .summary{ display:grid; grid-template-columns:repeat(4, 1fr); border-bottom:1px dashed var(--line); }
+  .summary .cell{ padding:22px 24px; border-right:1px dashed var(--line); }
+  .summary .cell:last-child{ border-right:none; }
+  .summary .num{ font-family:'Barlow Condensed', sans-serif; font-weight:700; font-size:34px; line-height:1; }
+  .summary .num.chili{ color:var(--chili); }
+  .summary .label{ font-size:11px; color:var(--ink-soft); margin-top:6px; }
+  .section{ padding:28px 36px 8px; }
+  .section-title{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+  .section-title h2{ font-size:26px; font-weight:700; }
+  .section-title .note{ font-size:11.5px; color:var(--ink-soft); }
+  .filtergroup{ padding:14px 36px; border-bottom:1px dashed var(--line); }
+  .filtergroup .flabel{ font-size:10.5px; color:var(--ink-soft); letter-spacing:0.08em; margin-bottom:8px; }
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; }
+  .filters button{ font-family:'IBM Plex Mono', monospace; font-size:12px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); padding:8px 14px; cursor:pointer; border-radius:2px; transition:background .15s ease, color .15s ease, border-color .15s ease; }
+  .filters button:hover{ border-color:var(--chili); color:var(--ink); }
+  .filters button.active{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
+  .filters.scrollable{ max-height:168px; overflow-y:auto; align-content:flex-start; padding:2px 6px 2px 0; border:1px solid var(--line); background:var(--paper); }
+  .searchbox{ font-family:'IBM Plex Mono', monospace; font-size:12px; padding:8px 10px; border:1px solid var(--line); background:var(--paper); color:var(--ink); width:100%; max-width:280px; margin-bottom:8px; border-radius:2px; }
+  .rank{ padding:0 36px 8px; }
+  .rank-row{ display:grid; grid-template-columns:26px 1fr 90px 100px; align-items:center; gap:14px; padding:9px 0; border-bottom:1px solid var(--paper-dim); cursor:default; }
+  .rank-row .pos{ font-size:12px; color:var(--ink-soft); }
+  .rank-row .name{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:16px; display:flex; flex-direction:column; gap:5px; }
+  .rank-row .barwrap{ height:7px; background:var(--paper-dim); position:relative; overflow:hidden; }
+  .rank-row .bar{ height:100%; background:var(--chili); }
+  .rank-row .qty{ text-align:right; font-weight:600; font-size:15px; }
+  .rank-row .val{ text-align:right; font-size:12px; color:var(--ink-soft); }
+  .rank-row .val .pct{ color:var(--chili); font-weight:600; }
+  .grid-2{ display:grid; grid-template-columns:1fr; gap:28px; padding:8px 36px 8px; align-items:start; }
+  @media (max-width:720px){ .summary{ grid-template-columns:1fr 1fr; } }
+  @media (min-width:900px){ .grid-2{ grid-template-columns:1fr 1fr; } }
+  .hourbars{ display:flex; align-items:flex-end; gap:4px; height:150px; border-bottom:1px solid var(--line); padding-top:10px; }
+  .hourbars .col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:6px; }
+  .hourbars .bar{ width:100%; background:var(--amber); }
+  .hourbars .bar.peak{ background:var(--chili); }
+  .hourbars .val{ font-size:10px; font-weight:600; color:var(--ink-soft); line-height:1; white-space:nowrap; }
+  .hourbars .val.peak{ color:var(--chili); }
+  .hourlabels{ display:flex; gap:4px; margin-top:6px; }
+  .hourlabels span{ flex:1; text-align:center; font-size:9px; color:var(--ink-soft); }
+  .storecards{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:10px; max-height:480px; overflow-y:auto; padding:2px 6px 2px 0; align-content:start; }
+  .storecard{ border:1px solid var(--line); padding:14px 16px; cursor:pointer; }
+  .storecard:hover{ border-color:var(--chili); }
+  .storecard .name{ font-family:'Barlow Condensed', sans-serif; font-weight:600; font-size:17px; margin-bottom:2px; }
+  .storecard .meta{ font-size:10.5px; color:var(--leaf); margin-bottom:8px; line-height:1.6; }
+  .storecard .row{ display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft); padding:3px 0; }
+  .storecard .row b{ color:var(--ink); font-weight:600; }
+  .storecard .top{ margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); font-size:12px; }
+  .storecard .top .lbl{ color:var(--ink-soft); }
+  .storecard .top .val{ color:var(--chili); font-weight:600; }
+  table{ width:100%; border-collapse:collapse; font-size:12px; }
+  thead th{ text-align:left; font-family:'Barlow Condensed', sans-serif; font-size:13px; font-weight:600; color:var(--ink-soft); padding:8px 6px; border-bottom:1px solid var(--line); }
+  thead th.num, tbody td.num{ text-align:right; }
+  tbody td{ padding:8px 6px; border-bottom:1px solid var(--paper-dim); }
+  tbody tr:hover{ background:var(--paper-dim); }
+  .foot{ padding:24px 36px 34px; text-align:center; font-size:11px; color:var(--ink-soft); border-top:1px dashed var(--line); margin-top:12px; }
+  .empty-note{ padding:24px 36px; font-size:12px; color:var(--ink-soft); }
+  .drillhint{ font-size:10.5px; color:var(--ink-soft); margin-top:-6px; }
+  /* modal */
+  .modal-bg{ position:fixed; inset:0; background:rgba(34,29,24,0.55); display:none; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; z-index:50; }
+  .modal-bg.open{ display:flex; }
+  .modal{ background:var(--paper); max-width:640px; width:100%; border:1px solid var(--line); }
+  .modal .mhead{ padding:18px 22px; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .modal .mhead h3{ font-size:20px; }
+  .modal .mhead button{ background:none; border:none; font-size:18px; cursor:pointer; color:var(--ink-soft); }
+  .modal .mbody{ padding:16px 22px; max-height:60vh; overflow-y:auto; }
+  .trx-card{ border-bottom:1px dashed var(--line); padding:10px 0; font-size:12px; }
+  .trx-card .trow{ display:flex; justify-content:space-between; color:var(--ink-soft); }
+  .trx-card .item{ display:flex; justify-content:space-between; padding:2px 0 2px 10px; }
+  .trx-card .tot{ text-align:right; font-weight:600; margin-top:4px; }
+  .daypicker{ display:flex; gap:8px; align-items:center; padding:12px 22px; border-bottom:1px dashed var(--line); font-size:12px; }
+  .daypicker select{ font-family:'IBM Plex Mono', monospace; padding:6px 8px; }
+</style>
+</head>
+<body>
+
+<div class="ticket">
+  <div class="head">
+    <div>
+      <div class="brand">LAPORAN PENJUALAN · POS</div>
+      <h1>Menu Terlaris</h1>
+      <div class="sub" id="dateRange">-</div>
+    </div>
+    <div class="stamp" id="genStamp">Memuat data...</div>
+  </div>
+
+  <div class="statusbar" id="statusBar">Menghubungkan ke server...</div>
+
+  <div class="summary">
+    <div class="cell"><div class="num" id="sumQty">-</div><div class="label">PORSI TERJUAL</div></div>
+    <div class="cell"><div class="num chili" id="sumValue">-</div><div class="label">TOTAL OMZET</div></div>
+    <div class="cell"><div class="num" id="sumTrx">-</div><div class="label">TRANSAKSI</div></div>
+    <div class="cell"><div class="num" id="sumTop">-</div><div class="label">MENU TERLARIS <span id="sumTopPct"></span></div></div>
+  </div>
+
+  <div class="filtergroup"><div class="flabel">TAHUN</div><div class="filters" id="yearFilters"></div></div>
+  <div class="filtergroup"><div class="flabel">BULAN</div><div class="filters" id="monthFilters"></div></div>
+  <div class="filtergroup"><div class="flabel">HARI</div><div class="filters scrollable" id="dayFilters"></div></div>
+  <div class="filtergroup"><div class="flabel">KANAL</div><div class="filters" id="channelFilters"></div></div>
+  <div class="filtergroup"><div class="flabel">AREA</div><div class="filters" id="areaFilters"></div></div>
+  <div class="filtergroup"><div class="flabel">KACAB</div><div class="filters" id="kacabFilters"></div></div>
+  <div class="filtergroup">
+    <div class="flabel">MENU <span style="font-weight:400;">(lihat jam ramai khusus 1 menu)</span></div>
+    <input type="text" class="searchbox" id="menuSearchInput" placeholder="Cari menu...">
+    <div class="filters scrollable" id="menuFilters"></div>
+  </div>
+  <div class="filtergroup">
+    <div class="flabel">GERAI</div>
+    <input type="text" class="searchbox" id="storeSearchInput" placeholder="Cari gerai...">
+    <div class="filters scrollable" id="storeFilters"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><h2>Ranking Menu</h2><div class="note">nama menu persis seperti di kasir (menu_toko)</div></div>
+  </div>
+  <div class="rank" id="rankList"></div>
+  <div class="empty-note" id="emptyNote" style="display:none;">Belum ada data untuk filter ini.</div>
+
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="section-title" style="padding:0;"><h2>Jam Ramai</h2><div class="note" id="hourNote">porsi terjual per jam</div></div>
+      <div class="hourbars" id="hourBars"></div>
+      <div class="hourlabels" id="hourLabels"></div>
+    </div>
+    <div>
+      <div class="section-title" style="padding:0;"><h2>Per Gerai</h2><div class="note">klik gerai untuk lihat struk</div></div>
+      <input type="text" class="searchbox" id="storeCardSearchInput" placeholder="Cari gerai...">
+      <div class="storecards" id="storeCards"></div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:8px;">
+    <div class="section-title"><h2>Rincian Semua Menu</h2><div class="note">mengikuti filter di atas, diurutkan qty</div></div>
+    <table>
+      <thead><tr><th>Menu (kasir)</th><th class="num">Qty</th><th class="num">Omzet</th><th class="num">% Omzet</th></tr></thead>
+      <tbody id="detailTable"></tbody>
+    </table>
+  </div>
+
+  <div class="foot">Dashboard menu terlaris — data live dari Google Sheets lewat Apps Script API.</div>
+</div>
+
+<!-- MODAL DRILL-DOWN STRUK -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="mhead">
+      <h3 id="modalTitle">Detail Struk</h3>
+      <button id="modalClose">✕</button>
+    </div>
+    <div class="daypicker">
+      Tanggal:
+      <select id="modalDaySelect"></select>
+    </div>
+    <div class="mbody" id="modalBody">Pilih tanggal untuk melihat struk...</div>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   GANTI URL INI dengan URL Web App hasil deploy Apps Script (Code.gs)
+   Contoh: https://script.google.com/macros/s/AKfycbxxxxxxx/exec
+   ===================================================================== */
+const API_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI";
+
+let META = { years: [], byYear: {} };
+let FILTER = { tahun: "ALL", bulan: "ALL", hari: "ALL", kanal: "ALL", area: "ALL", kacab: "ALL", gerai: "ALL", menu: "ALL" };
+let LAST_SUMMARY = null;
+let modalStore = null;
+
+function rupiah(n){ return "Rp " + Math.round(n||0).toLocaleString("id-ID"); }
+function bulanNama(n){ return ["","Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"][Number(n)] || n; }
+function formatDateLabel(d){
+  if(!d) return d;
+  const [y,m,day] = d.split("-");
+  return `${parseInt(day)} ${bulanNama(m)} ${y}`;
+}
+
+function setStatus(msg, isErr){
+  const el = document.getElementById("statusBar");
+  el.textContent = msg;
+  el.className = "statusbar" + (isErr ? " err" : "");
+}
+
+async function apiGet(params){
+  const usp = new URLSearchParams(params);
+  const res = await fetch(API_URL + "?" + usp.toString());
+  const data = await res.json();
+  if(data.error) throw new Error(data.error);
+  return data;
+}
+
+function makeFilterButtons(containerId, options, allLabel, current, onPick){
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
+  const allBtn = document.createElement("button");
+  allBtn.textContent = allLabel;
+  allBtn.className = current === "ALL" ? "active" : "";
+  allBtn.onclick = () => onPick("ALL");
+  el.appendChild(allBtn);
+  options.forEach(opt => {
+    const b = document.createElement("button");
+    b.textContent = opt.label !== undefined ? opt.label : opt;
+    b.className = String(current) === String(opt.value !== undefined ? opt.value : opt) ? "active" : "";
+    b.onclick = () => onPick(opt.value !== undefined ? opt.value : opt);
+    el.appendChild(b);
+  });
+}
+
+async function loadMeta(){
+  setStatus("Memuat daftar periode...");
+  META = await apiGet({ mode: "meta" });
+
+  // Kalau dibuka lewat link dengan ?tahun=2026&bulan=8, pakai itu (deep link per bulan
+  // dari kartu di menu-index.html) — supaya kartu "Agustus" selalu buka Agustus,
+  // tidak ikut pindah ke "bulan terbaru" begitu bulan lain sudah ditambahkan.
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlTahun = urlParams.get("tahun");
+  const urlBulan = urlParams.get("bulan");
+
+  if(urlTahun && META.years && META.years.includes(urlTahun)){
+    FILTER.tahun = urlTahun;
+    const bulanList = META.byYear[FILTER.tahun] || [];
+    if(urlBulan && bulanList.includes(Number(urlBulan))){
+      FILTER.bulan = Number(urlBulan);
+    } else if(bulanList.length){
+      FILTER.bulan = bulanList[bulanList.length - 1];
+    }
+  } else if(META.years && META.years.length){
+    FILTER.tahun = META.years[META.years.length - 1];
+    const bulanList = META.byYear[FILTER.tahun] || [];
+    if(bulanList.length) FILTER.bulan = bulanList[bulanList.length - 1];
+  }
+  renderYearMonthFilters();
+  await loadSummary();
+}
+
+function renderYearMonthFilters(){
+  makeFilterButtons("yearFilters", META.years || [], "Semua Tahun", FILTER.tahun, (v) => {
+    FILTER.tahun = v; FILTER.bulan = "ALL"; FILTER.hari = "ALL";
+    renderYearMonthFilters(); loadSummary();
+  });
+  const bulanOpts = FILTER.tahun === "ALL" ? [] : (META.byYear[FILTER.tahun] || []).map(b => ({ value: b, label: bulanNama(b) }));
+  makeFilterButtons("monthFilters", bulanOpts, "Semua Bulan", FILTER.bulan, (v) => {
+    FILTER.bulan = v; FILTER.hari = "ALL"; loadSummary();
+  });
+}
+
+async function loadSummary(){
+  try{
+    setStatus("Mengambil & mengagregasi data dari Google Sheets...");
+    const params = {
+      mode: "summary", tahun: FILTER.tahun, bulan: FILTER.bulan, hari: FILTER.hari,
+      kanal: FILTER.kanal, area: FILTER.area, kacab: FILTER.kacab, gerai: FILTER.gerai, menu: FILTER.menu
+    };
+    const data = await apiGet(params);
+    LAST_SUMMARY = data;
+    renderSummary(data);
+    setStatus(`Sumber: Google Sheets · ${data.periode.jumlahBaris.toLocaleString("id-ID")} baris dipindai untuk periode ini.`);
+  }catch(err){
+    setStatus("Gagal memuat data: " + err.message, true);
+  }
+}
+
+function renderSummary(data){
+  document.getElementById("dateRange").textContent =
+    data.periode.mulai ? (data.periode.mulai === data.periode.akhir
+      ? formatDateLabel(data.periode.mulai)
+      : `${formatDateLabel(data.periode.mulai)} — ${formatDateLabel(data.periode.akhir)}`) : "-";
+  document.getElementById("genStamp").innerHTML = `Tahun <b>${data.periode.tahun}</b> · Bulan <b>${data.periode.bulan === "ALL" ? "Semua" : bulanNama(data.periode.bulan)}</b>`;
+
+  document.getElementById("sumQty").textContent = data.totals.qty || 0;
+  document.getElementById("sumValue").textContent = rupiah(data.totals.value);
+  document.getElementById("sumTrx").textContent = data.totals.trx || 0;
+  document.getElementById("sumTop").textContent = data.totals.topMenu || "-";
+  document.getElementById("sumTopPct").textContent = data.totals.value ? `(${data.totals.topMenuPct}% omzet)` : "";
+
+  // hari
+  makeFilterButtons("dayFilters", (data.filterOptions.days||[]).map(d=>({value:d,label:d})), "Semua Hari", FILTER.hari, (v)=>{ FILTER.hari=v; loadSummary(); });
+  // kanal
+  makeFilterButtons("channelFilters", data.filterOptions.channels||[], "Semua Kanal", FILTER.kanal, (v)=>{ FILTER.kanal=v; loadSummary(); });
+  // area
+  makeFilterButtons("areaFilters", data.filterOptions.areas||[], "Semua Area", FILTER.area, (v)=>{ FILTER.area=v; loadSummary(); });
+  // kacab
+  makeFilterButtons("kacabFilters", data.filterOptions.kacabs||[], "Semua Kacab", FILTER.kacab, (v)=>{ FILTER.kacab=v; loadSummary(); });
+  // menu
+  renderMenuFilterButtons(data.filterOptions.menus||[]);
+  // gerai
+  renderStoreFilterButtons(data.filterOptions.stores||[]);
+
+  // rank
+  const rankEl = document.getElementById("rankList");
+  rankEl.innerHTML = "";
+  document.getElementById("emptyNote").style.display = data.menuRank.length ? "none" : "block";
+  const top = data.menuRank.slice(0, 15);
+  const maxQty = top.length ? top[0].qty : 1;
+  top.forEach((v, i) => {
+    const row = document.createElement("div");
+    row.className = "rank-row";
+    row.innerHTML = `
+      <div class="pos">${i+1}</div>
+      <div class="name">${v.menu_toko}<div class="barwrap"><div class="bar" style="width:${(v.qty/maxQty*100).toFixed(1)}%"></div></div></div>
+      <div class="qty">${v.qty}x</div>
+      <div class="val">${rupiah(v.value)} <span class="pct">(${v.pct}%)</span></div>`;
+    rankEl.appendChild(row);
+  });
+
+  // hour
+  document.getElementById("hourNote").textContent = FILTER.menu !== "ALL"
+    ? `porsi terjual "${FILTER.menu}" per jam`
+    : "porsi terjual per jam";
+  const hourBarsEl = document.getElementById("hourBars");
+  const hourLabelsEl = document.getElementById("hourLabels");
+  hourBarsEl.innerHTML = ""; hourLabelsEl.innerHTML = "";
+  const maxHour = data.hourly.length ? Math.max(...data.hourly.map(h=>h.qty)) : 1;
+  data.hourly.forEach(h => {
+    const isPeak = h.qty === maxHour;
+    const col = document.createElement("div");
+    col.className = "col";
+    col.innerHTML = `<div class="val ${isPeak?'peak':''}">${h.qty}</div><div class="bar ${isPeak?'peak':''}" style="height:${(h.qty/maxHour*78).toFixed(0)}%"></div>`;
+    hourBarsEl.appendChild(col);
+    const lbl = document.createElement("span"); lbl.textContent = h.hour; hourLabelsEl.appendChild(lbl);
+  });
+
+  // store cards
+  renderStoreCards(data.stores || []);
+
+  // detail table
+  const tbody = document.getElementById("detailTable");
+  tbody.innerHTML = "";
+  data.menuRank.forEach(v => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${v.menu_toko}</td><td class="num">${v.qty}</td><td class="num">${rupiah(v.value)}</td><td class="num">${v.pct}%</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderStoreFilterButtons(stores){
+  const searchVal = (document.getElementById("storeSearchInput").value || "").toUpperCase();
+  const filtered = stores.filter(s => s.toUpperCase().includes(searchVal));
+  makeFilterButtons("storeFilters", filtered, "Semua Gerai", FILTER.gerai, (v)=>{ FILTER.gerai=v; loadSummary(); });
+}
+document.getElementById("storeSearchInput").addEventListener("input", () => {
+  if(LAST_SUMMARY) renderStoreFilterButtons(LAST_SUMMARY.filterOptions.stores||[]);
+});
+
+function renderMenuFilterButtons(menus){
+  const searchVal = (document.getElementById("menuSearchInput").value || "").toUpperCase();
+  const filtered = menus.filter(m => m.toUpperCase().includes(searchVal));
+  makeFilterButtons("menuFilters", filtered, "Semua Menu", FILTER.menu, (v)=>{ FILTER.menu=v; loadSummary(); });
+}
+document.getElementById("menuSearchInput").addEventListener("input", () => {
+  if(LAST_SUMMARY) renderMenuFilterButtons(LAST_SUMMARY.filterOptions.menus||[]);
+});
+
+function renderStoreCards(stores){
+  const searchVal = (document.getElementById("storeCardSearchInput").value || "").toUpperCase();
+  const el = document.getElementById("storeCards");
+  el.innerHTML = "";
+  stores.filter(s => s.toko.toUpperCase().includes(searchVal)).forEach(s => {
+    const card = document.createElement("div");
+    card.className = "storecard";
+    card.innerHTML = `
+      <div class="name">${s.toko}</div>
+      <div class="meta">${s.area ? "Area: "+s.area : ""}${s.kacab ? " · Kacab: "+s.kacab : ""}</div>
+      <div class="row"><span>Porsi terjual</span><b>${s.qty}</b></div>
+      <div class="row"><span>Omzet</span><b>${rupiah(s.value)}</b></div>
+      <div class="row"><span>Transaksi</span><b>${s.trx}</b></div>
+      <div class="top"><span class="lbl">Terlaris:</span> <span class="val">${s.topMenu}</span></div>
+      <div class="drillhint">klik untuk lihat struk →</div>`;
+    card.onclick = () => openDrilldown(s.toko);
+    el.appendChild(card);
+  });
+}
+document.getElementById("storeCardSearchInput").addEventListener("input", () => {
+  if(LAST_SUMMARY) renderStoreCards(LAST_SUMMARY.stores||[]);
+});
+
+// ---------- DRILL-DOWN PER STRUK ----------
+function openDrilldown(toko){
+  modalStore = toko;
+  document.getElementById("modalTitle").textContent = "Detail Struk — " + toko;
+  document.getElementById("modalBg").classList.add("open");
+  const sel = document.getElementById("modalDaySelect");
+  sel.innerHTML = "";
+  if(FILTER.bulan === "ALL"){
+    document.getElementById("modalBody").textContent = "Pilih 1 bulan spesifik dulu di filter atas (drill-down struk butuh bulan yang jelas).";
+    return;
+  }
+  const days = (LAST_SUMMARY.filterOptions.days || []);
+  days.forEach(d => {
+    const opt = document.createElement("option");
+    const tanggalStr = `${FILTER.tahun}-${String(FILTER.bulan).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    opt.value = tanggalStr; opt.textContent = formatDateLabel(tanggalStr);
+    sel.appendChild(opt);
+  });
+  if(days.length){ loadDrilldown(sel.value); }
+  else { document.getElementById("modalBody").textContent = "Tidak ada tanggal spesifik dipilih (sedang mode Semua Bulan/Tahun). Pilih 1 bulan dulu di filter atas."; }
+}
+document.getElementById("modalDaySelect").addEventListener("change", (e) => loadDrilldown(e.target.value));
+document.getElementById("modalClose").onclick = () => document.getElementById("modalBg").classList.remove("open");
+document.getElementById("modalBg").addEventListener("click", (e) => { if(e.target.id === "modalBg") e.currentTarget.classList.remove("open"); });
+
+async function loadDrilldown(tanggal){
+  const body = document.getElementById("modalBody");
+  body.textContent = "Memuat struk...";
+  try{
+    const data = await apiGet({ mode: "raw", tahun: FILTER.tahun, bulan: FILTER.bulan, gerai: modalStore, tanggal });
+    if(data.error){ body.textContent = data.error; return; }
+    if(!data.transaksi.length){ body.textContent = "Tidak ada struk pada tanggal ini."; return; }
+    body.innerHTML = "";
+    data.transaksi.forEach(t => {
+      const div = document.createElement("div");
+      div.className = "trx-card";
+      div.innerHTML = `
+        <div class="trow"><span>#${t.nomor}</span><span>${t.tanggal.substring(11)} · ${t.channel}</span></div>
+        ${t.items.map(it => `<div class="item"><span>${it.menu_toko} ×${it.qty}</span><span>${rupiah(it.total_price)}</span></div>`).join("")}
+        <div class="tot">Total: ${rupiah(t.total)}</div>`;
+      body.appendChild(div);
+    });
+  }catch(err){
+    body.textContent = "Gagal memuat: " + err.message;
+  }
+}
+
+loadMeta();
+</script>
+</body></html>

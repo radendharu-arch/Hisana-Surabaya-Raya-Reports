@@ -185,7 +185,7 @@
    GANTI URL INI dengan URL Web App hasil deploy Apps Script (Code.gs)
    Contoh: https://script.google.com/macros/s/AKfycbxxxxxxx/exec
    ===================================================================== */
-const API_URL = "PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI";
+const API_URL = "https://script.google.com/macros/s/AKfycby2EM3c8sp7ivfbNID12wBG03xbmvqTE-YmkESVOBDJXpIJCp37C2vqNaAuXoJ6aKlSrw/exec";
 
 let META = { years: [], byYear: {} };
 let FILTER = { tahun: "ALL", bulan: "ALL", hari: "ALL", kanal: "ALL", area: "ALL", kacab: "ALL", gerai: "ALL", menu: "ALL" };
@@ -233,7 +233,16 @@ function makeFilterButtons(containerId, options, allLabel, current, onPick){
 
 async function loadMeta(){
   setStatus("Memuat daftar periode...");
-  META = await apiGet({ mode: "meta" });
+  try{
+    META = await apiGet({ mode: "meta" });
+  }catch(err){
+    setStatus("Gagal menghubungi server: " + err.message + " — cek API_URL di dashboard.html, dan pastikan Web App di-deploy dengan akses 'Anyone'.", true);
+    return;
+  }
+  if(!META.years || !META.years.length){
+    setStatus("Server tersambung, tapi tab 'Index' di spreadsheet Config masih kosong / belum ada data bulan manapun.", true);
+    return;
+  }
 
   // Kalau dibuka lewat link dengan ?tahun=2026&bulan=8, pakai itu (deep link per bulan
   // dari kartu di menu-index.html) — supaya kartu "Agustus" selalu buka Agustus,

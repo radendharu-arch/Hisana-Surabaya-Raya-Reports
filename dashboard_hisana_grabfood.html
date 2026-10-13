@@ -9,12 +9,12 @@
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .hero{background:linear-gradient(120deg,#007a3d,#00b14f);color:#fff;padding:22px 16px 70px}
-.w{max-width:1200px;margin:0 auto;padding:0 16px}.hero .w{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.w{max-width:1500px;margin:0 auto;padding:0 16px}.hero .w{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
 h1{font-size:22px;margin:0}h2{font-size:14px;margin:0 0 12px}.sub{opacity:.92;font-size:13px}.pull{margin-top:-52px}
 .drop{border:2px dashed rgba(255,255,255,.7);border-radius:14px;padding:10px 16px;cursor:pointer;text-align:center;font-size:13px}.drop.on{background:rgba(255,255,255,.2)}
 .c{background:#fff;border-radius:16px;padding:16px;min-width:0;margin-bottom:14px;box-shadow:0 1px 3px rgba(20,40,30,.06),0 6px 20px rgba(20,40,30,.04)}
 .g{display:grid;gap:14px;margin-bottom:14px}.g>.c{margin:0}
-.k{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.two{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}.main{grid-template-columns:2fr 1fr}
+.k{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.two{grid-template-columns:repeat(auto-fit,minmax(min(330px,100%),1fr))}.main{grid-template-columns:2fr 1fr}
 @media(max-width:700px){.main{grid-template-columns:1fr}}
 .kc{border-top:4px solid var(--a,#00a54f)}.kv{font-size:26px;font-weight:800;letter-spacing:-.5px}.ic{font-size:18px;float:right;opacity:.85}
 .mute{color:var(--mute);font-size:12px}.bad{color:var(--bad)}.warn{color:var(--warn)}.ok{color:var(--ok)}.ov{overflow-x:auto}
@@ -36,19 +36,25 @@ button{cursor:pointer}button.p{background:var(--acc);border-color:var(--acc);col
 @media print{.noprint,.hero .acts,#gm,#msg{display:none!important}.pull{margin-top:0}.hero{padding:12px 16px}.c{box-shadow:none;border:1px solid #eee;break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .sr{cursor:pointer}.sr:hover td{background:#eaf6ee}.ar{color:var(--acc);display:inline-block;width:12px}.bt{opacity:0;margin-left:8px;font-size:11px;color:var(--ok);border:1px solid #bfe6cd;border-radius:999px;padding:1px 8px;background:#fff}.sr:hover .bt{opacity:1}
 </style></head><body>
-<div class="hero"><div class="w"><div><h1>Hisana Surabaya Raya · GrabFood</h1><div class="sub">Dashboard cancel rate &amp; offline outlet · batas offline maksimal 10% dari jam jadwal buka</div></div>
+<div class="hero"><div class="w"><div><h1>Hisana Surabaya Raya · GrabFood</h1><div class="sub">Dashboard cancel rate &amp; offline outlet · batas offline maksimal 10% dari jam jadwal buka</div><div class="sub" id="kb" style="font-weight:700;margin-top:4px"></div></div>
 <div class="acts"><input type="file" id="fi" hidden="" multiple="" accept=".xlsx,.xls,.csv"><div class="drop" id="dz" onclick="gate(()=&gt;$('#fi').click())"><b>⬆ Update data</b><div>Klik / drop Transaction, Offline Hours, mapping Kacab</div></div><button class="dlb" onclick="gate(dl)"><b>⬇ Download HTML terbaru</b><div>semua data, siap di-commit</div></button></div></div></div>
 <div class="w pull">
-<div class="c noprint"><div class="ctl"><b>Periode</b><select id="wk" onchange="pick(this.value)"></select><select id="mo" onchange="pick(this.value)"></select>
-<input type="date" id="rf" onchange="rng()"> – <input type="date" id="rt" onchange="rng()"><button onclick="pick('all')">Semua data</button><span class="mute" id="per"></span></div><div class="mute" id="msg" style="margin-top:6px"></div></div>
+<div class="c noprint"><div class="ctl"><b>Periode</b>
+<select id="wk" onchange="pick(this.value)"></select><select id="mo" onchange="pick(this.value)"></select>
+<input type="date" id="rf" onchange="rng()"> – <input type="date" id="rt" onchange="rng()"><button onclick="pick('all')">Semua data</button>
+<span class="mute" id="per"></span><b style="margin-left:10px">Kacab</b><select id="gk" onchange="setK(this.value)"></select><span style="flex:1"></span>
+</div><div class="mute" id="msg" style="margin-top:6px"></div></div>
 <div class="g k" id="kpi"></div>
 <div class="g main"><div class="c"><h2>Order masuk &amp; cancel rate per hari</h2><div id="cb"></div></div><div class="c"><h2>Alasan cancel</h2><div id="rs"></div></div></div>
 <div class="g"><div class="c"><h2>🔥 Cancel tertinggi · Top 10 toko</h2><div id="top"></div></div><div class="c"><h2>⏰ Puncak cancel</h2><div id="pk"></div></div></div>
-<div class="c"><h2>Per Kacab</h2><div class="ov"><table id="kc"></table></div></div>
-<div class="g two"><div class="c"><h2>Offline rate per Kacab <span class="mute">(garis hitam = batas 10%)</span></h2><div id="ob"></div></div><div class="c"><h2>Tren per Kacab · cancel rate (%)</h2><div class="ov"><table id="kt"></table></div><div class="mute" style="margin-top:6px">Tanda “–” berarti Kacab tidak punya order pada hari itu, jadi cancel rate tidak bisa dihitung.</div></div></div>
-<div class="c"><h2>Detail per toko</h2><div class="ctl" style="margin-bottom:10px"><input id="q" placeholder="Cari toko" oninput="q=this.value;tbl()"><select id="fk" onchange="fk=this.value;tbl()"></select></div>
+<div class="g" id="wk2"><div class="c"><h2>Tren mingguan · cancel rate (%)</h2><div id="w1"></div></div><div class="c"><h2>Tren mingguan · offline rate (% dari jam jadwal)</h2><div id="w2"></div></div></div>
+<div class="c"><h2 id="h-kc">Per Kacab</h2><div class="ov"><table id="kc"></table></div></div>
+<div class="g"><div class="c"><h2>Pola per hari dalam seminggu</h2><div id="dw"></div></div><div class="c"><h2 id="h-rk">Alasan cancel per Kacab</h2><div id="rk" style="max-height:420px;overflow:auto"></div></div></div>
+<div class="g two"><div class="c"><h2 id="h-ob">Offline rate per Kacab <span class="mute">(garis hitam = batas 10%)</span></h2><div id="ob"></div></div><div class="c"><h2 id="h-kt">Tren per Kacab · cancel rate (%)</h2><div class="ov"><table id="kt"></table></div><div class="mute" style="margin-top:6px">Tanda “–” berarti tidak ada order pada hari itu, jadi cancel rate tidak bisa dihitung.</div></div></div>
+<div class="c"><h2>Detail per toko</h2><div class="ctl" style="margin-bottom:10px"><input id="q" placeholder="Cari toko" oninput="q=this.value;tbl()"></div>
 <div class="ov" style="max-height:560px"><table id="st"></table></div><div class="mute" style="margin-top:6px">Sel harian = offline rate (%): hijau rendah, merah tinggi. Toko mapping yang tidak ada di file Offline Hours dianggap online penuh (0% offline). Kolom harian tampil jika periode ≤ 14 hari. Klik baris toko untuk melihat detail per tanggal (order, cancel, alasan cancel, offline).</div></div>
 </div>
+<div id="dm" style="display:none;position:fixed;inset:0;background:rgba(20,40,30,.45);z-index:40;justify-content:center;align-items:flex-start;overflow:auto;padding:24px 12px" onclick="if(event.target===this)closeD()"><div class="c" style="width:min(860px,100%);margin:0" id="db"></div></div>
 <div id="gm" style="display:none;position:fixed;inset:0;background:rgba(20,40,30,.45);z-index:50;align-items:center;justify-content:center"><div class="c" style="width:min(320px,90vw);margin:0"><h2>🔒 Masukkan password</h2><input type="password" id="gp" style="width:100%" placeholder="Password" onkeydown="if(event.key==='Enter')gok()"><div class="bad" id="ge" style="font-size:12px;min-height:18px;margin:6px 0"></div><div class="ctl" style="justify-content:flex-end"><button onclick="gx()">Batal</button><button class="p" onclick="gok()">Lanjut</button></div></div></div>
 <script>
 const SRC='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
@@ -66,6 +72,8 @@ const pc=(a,b)=>b?a/b*100:null,sum=a=>a.reduce((x,y)=>x+y,0);
 const fd=i=>{const[y,m,d]=i.split('-');return +d+' '+MS[m-1]};
 const cls=v=>v==null?'':v>=10?'bad':v>=5?'warn':'ok',ocls=v=>v==null?'':v>TG*2?'bad':v>TG?'warn':'ok';
 const heat=(v,m)=>v==null?'':`style="background:hsl(${120*(1-Math.min(v,m)/m)} 70% 48% / .3)"`;
+const dp=(a,b,up,u,dc=1)=>{if(a==null||b==null)return'';const d=a-b;if(Math.abs(d)<.05)return'<span class="mute">= periode lalu</span>';return`<span class="${(d>0)==up?'ok':'bad'}">${d>0?'▲':'▼'} ${f(Math.abs(d),dc)} ${u}</span> <span class="mute">vs lalu</span>`};
+const prevD=D=>{const i=D.length?ALL.indexOf(D[0]):-1;return i>=D.length?ALL.slice(i-D.length,i):null};
 // row: [n, Rp, r0 stok, r1 tutup, r2 sibuk, r3 lain, offMenit, jadwalMenit, net, iklan]
 let S={},HR={},ALL=[],rf='',rt='',q='',fk='',sk='cr',sd=-1;
 const nk=s=>{s=String(s||'').toLowerCase().replace(/\s+/g,' ').trim();return ALIAS[s]||s};
@@ -102,49 +110,93 @@ const alld=()=>[...new Set(Object.values(S).flatMap(s=>Object.keys(s.d)))].sort(
 function refresh(last){ALL=alld();if(last||!rf||!rt){rf=ALL[Math.max(0,ALL.length-7)]||'';rt=ALL[ALL.length-1]||''}render()}
 function pick(v){if(v==='all'){rf=ALL[0];rt=ALL[ALL.length-1]}else if(v){const[a,b]=v.split('|');rf=a;rt=b}render()}
 function rng(){rf=$('#rf').value||rf;rt=$('#rt').value||rt;render()}
-function calc(){const D=ALL.filter(d=>d>=rf&&d<=rt);
+function calc(X,nk){const D=X||ALL.filter(d=>d>=rf&&d<=rt);
  const L=Object.values(S).filter(s=>s.kacab!==UNM).map(s=>{let n=0,v=0,net=0,ads=0,r=[0,0,0,0],o=0,sc=0,dn=0,hi=0,full=0;
   D.forEach(d=>{const x=s.d[d];if(!x)return;n+=x[0];v+=x[1];for(let i=0;i<4;i++)r[i]+=x[2+i];net+=x[8];ads+=x[9];if(x[7]){o+=x[6];sc+=x[7];dn++;const p=x[6]/x[7]*100;if(p>TG)hi++;if(p>=99)full++}});
-  const c=sum(r);return{...s,n,v,net,ads,r,c,cr:pc(c,n),stok:r[0],or:pc(o,sc),o,sc,dn,hi,full}});return{D,L}}
+  const c=sum(r);return{...s,n,v,net,ads,r,c,cr:pc(c,n),stok:r[0],or:pc(o,sc),o,sc,dn,hi,full}}).filter(s=>nk||!fk||s.kacab==fk);return{D,L}}
 function agg(L,D){return{n:sum(L.map(s=>s.n)),c:sum(L.map(s=>s.c)),v:sum(L.map(s=>s.v)),net:sum(L.map(s=>s.net)),ads:sum(L.map(s=>s.ads)),st:L.length,zero:L.filter(s=>!s.n).length,
  o:sum(L.map(s=>s.o)),sc:sum(L.map(s=>s.sc)),dn:sum(L.map(s=>s.dn)),hi:sum(L.map(s=>s.hi)),full:sum(L.map(s=>s.full)),r:[0,1,2,3].map(i=>sum(L.map(s=>s.r[i]))),
  dd:D.map(d=>{let n=0,c=0;L.forEach(s=>{const x=s.d[d];if(x){n+=x[0];c+=x[2]+x[3]+x[4]+x[5]}});return[n,c]})}}
-const grp=L=>{const G={};L.forEach(s=>(G[s.kacab]=G[s.kacab]||[]).push(s));return G};
+const grp=L=>{const G={};L.forEach(s=>{const k=fk?s.id:s.kacab;(G[k]=G[k]||[]).push(s)});return G};
 function combo(dv){const W=640,H=220,pl=10,pb=34,pt=22,n=dv.length||1,bw=(W-pl)/n,mo=Math.max(1,...dv.map(x=>x[1])),mc=Math.max(5,...dv.map(x=>x[2]||0))*1.2,hh=H-pb-pt;let b='',pts=[],lb='';const st=Math.ceil(n/12);
  dv.forEach((x,i)=>{const cx=pl+i*bw+bw/2,h=x[1]/mo*hh,y=H-pb-(x[2]||0)/mc*hh;b+=`<rect x="${cx-bw*.32}" y="${H-pb-h}" width="${bw*.64}" height="${h}" rx="4" fill="#bfeacf"/>`;pts.push(cx+','+y);
   if(i%st==0)lb+=`<text x="${cx}" y="${H-14}" text-anchor="middle" font-size="10" fill="#66726c">${x[0]}</text>`;
   if(n<=16)lb+=`<text x="${cx}" y="${y-8}" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">${f(x[2])}%</text><text x="${cx}" y="${H-pb-h+11}" text-anchor="middle" font-size="9" fill="#2f6b49">${x[1]}</text>`});
  return`<svg viewBox="0 0 ${W} ${H}" style="width:100%">${b}<polyline points="${pts.join(' ')}" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>${pts.map(p=>`<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="3.5" fill="#fff" stroke="#dc2626" stroke-width="2"/>`).join('')}${lb}</svg><div class="mute">Batang = order masuk · garis = cancel rate (%)</div>`}
 function donut(v,tot){let o=0;const R=48,C=2*Math.PI*R;return`<svg viewBox="0 0 120 120" style="width:150px;display:block;margin:0 auto"><circle cx="60" cy="60" r="${R}" fill="none" stroke="#eef2ef" stroke-width="16"/>`+v.map((x,i)=>{const l=tot?x/tot*C:0,s=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${RC[i]}" stroke-width="16" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-o}" transform="rotate(-90 60 60)"/>`;o+=l;return s}).join('')+`<text x="60" y="58" text-anchor="middle" font-size="20" font-weight="800">${tot}</text><text x="60" y="74" text-anchor="middle" font-size="9" fill="#66726c">cancel</text></svg>`}
-function render(){const{D,L}=calc(),A=agg(L,D);
+function render(){const AL=calc(undefined,true);if(fk&&!AL.L.some(s=>s.kacab==fk))fk='';const{D,L}=calc(),A=agg(L,D);
  $('#rf').value=rf;$('#rt').value=rt;$('#rf').min=$('#rt').min=ALL[0]||'';$('#rf').max=$('#rt').max=ALL[ALL.length-1]||'';
  const wk=[];for(let i=0;i<ALL.length;i+=7){const a=ALL.slice(i,i+7);wk.unshift(`<option value="${a[0]}|${a[a.length-1]}">${fd(a[0])} – ${fd(a[a.length-1])}</option>`)}
  const ms={};ALL.forEach(d=>{const k=d.slice(0,7);(ms[k]=ms[k]||[]).push(d)});
  $('#wk').innerHTML='<option value="">Pilih minggu…</option>'+wk.join('');
  $('#mo').innerHTML='<option value="">Pilih bulan…</option>'+Object.keys(ms).sort().reverse().map(k=>`<option value="${ms[k][0]}|${ms[k][ms[k].length-1]}">${MS[+k.slice(5)-1]} ${k.slice(0,4)}</option>`).join('');
  $('#per').textContent=D.length?`${fd(D[0])} – ${fd(D[D.length-1])} ${D[D.length-1].slice(0,4)} · ${D.length} hari`:'belum ada data';
- const cr=pc(A.c,A.n),orr=pc(A.o,A.sc),hi=pc(A.hi,A.dn);
+ const cr=pc(A.c,A.n),orr=pc(A.o,A.sc),hi=pc(A.hi,A.dn),stk=pc(A.r[0],A.n);
+ const P=prevD(D),PC=P?calc(P):null,PA=PC?agg(PC.L,P):null,pcr=PA?pc(PA.c,PA.n):null,rel=(a,b)=>b?(a-b)/b*100:null;
+ const PG=PC?grp(PC.L):{},pk=k=>{if(!PG[k])return null;const g=agg(PG[k],P);return pc(g.c,g.n)};
+ const DL=PA?[dp(rel(A.n,PA.n),0,true,'%'),dp(cr,pcr,false,'pt'),dp(stk,pc(PA.r[0],PA.n),false,'pt'),dp(orr,pc(PA.o,PA.sc),false,'pt'),dp(hi,pc(PA.hi,PA.dn),false,'pt'),dp(A.zero,PA.zero,false,'toko',0)]:Array(6).fill('<span class="mute">belum ada periode pembanding</span>');
  $('#kpi').innerHTML=[['🛒','Order masuk',f(A.n,0)+' order','penjualan '+jt(A.v),'#3b82f6'],
   ['❌','Cancel rate',`<span class="${cls(cr)}">${f(cr)}%</span>`,`${f(A.c,0)} cancel dari ${f(A.n,0)} order masuk`,'#dc2626'],
-  ['📦','Cancel karena stok habis',`<span class="${cls(pc(A.r[0],A.n))}">${f(pc(A.r[0],A.n))}%</span>`,`${f(pc(A.r[0],A.c),0)}% dari cancel (${A.r[0]} order)`,'#f59e0b'],
+  ['📦','Cancel karena stok habis',`<span class="${cls(stk)}">${f(stk)}%</span>`,`${f(pc(A.r[0],A.c),0)}% dari cancel (${A.r[0]} order)`,'#f59e0b'],
   ['🔌','Offline rate',`<span class="${ocls(orr)}">${f(orr)}%</span>`,`${f(A.o/60,0)} jam offline dari ${f(A.sc/60,0)} jam jadwal`,'#00a54f'],
   ['⚠️','Toko-hari offline > '+TG+'%',`<span class="${hi>30?'bad':hi>15?'warn':'ok'}">${f(hi)}%</span>`,`${A.full} toko-hari offline seharian · ${A.dn} toko-hari`,'#8b5cf6'],
-  ['🏪','Toko tanpa order',`<span class="${A.zero?'warn':'ok'}">${A.zero}</span>`,`dari ${A.st} toko terdaftar`,'#64748b']].map(x=>`<div class="c kc" style="--a:${x[4]}"><span class="ic">${x[0]}</span><div class="mute">${x[1]}</div><div class="kv">${x[2]}</div><div class="mute">${x[3]}</div></div>`).join('');
+  ['🏪','Toko tanpa order',`<span class="${A.zero?'warn':'ok'}">${A.zero}</span>`,`dari ${A.st} toko ${fk?'di '+fk:'terdaftar'}`,'#64748b']].map((x,i)=>`<div class="c kc" style="--a:${x[4]}"><span class="ic">${x[0]}</span><div class="mute">${x[1]}</div><div class="kv">${x[2]}</div><div class="mute">${x[3]}</div><div style="font-size:12px;margin-top:3px">${DL[i]}</div></div>`).join('');
  const dv=D.map((d,i)=>[fd(d),A.dd[i][0],pc(A.dd[i][1],A.dd[i][0]),A.dd[i][1],d]);$('#cb').innerHTML=combo(dv);
  $('#rs').innerHTML=donut(A.r,A.c)+RS.map((n,i)=>`<div class="leg"><u style="background:${RC[i]}"></u><span style="flex:1">${n}</span><b>${A.r[i]}</b><span class="mute">${f(pc(A.r[i],A.c),0)}%</span></div>`).join('');
  const tp=[...L].filter(s=>s.c).sort((a,b)=>b.c-a.c||b.cr-a.cr).slice(0,10),tm=Math.max(1,tp[0]?tp[0].c:1);
  $('#top').innerHTML=tp.map((s,i)=>`<div class="rk"><b class="n">${i+1}</b><div>${s.name}<span class="mute"> · ${s.kacab}</span><div class="bar"><i style="width:${s.c/tm*100}%"></i></div></div><div style="text-align:right"><b>${s.c}</b> <span class="mute">/ ${s.n}</span><div class="${cls(s.cr)}" style="font-size:11px">${f(s.cr)}% cancel</div></div></div>`).join('')||'<div class="mute">Tidak ada cancel pada periode ini.</div>';
  const hh=Array(24).fill(0);D.forEach(d=>(HR[d]||[]).forEach((c,h)=>hh[h]+=c));const hm=Math.max(1,...hh),top3=hh.map((c,h)=>[c,h]).sort((a,b)=>b[0]-a[0]).slice(0,3).filter(x=>x[0]).map(x=>x[1]);
  const bd=dv.reduce((a,x)=>x[3]>a[3]?x:a,dv[0]||[0,0,0,0,'']);
- $('#pk').innerHTML=D.length?`<div class="mute">Hari cancel terbanyak</div><div class="kv">${bd[0]}</div><div class="mute">${bd[3]} cancel · ${f(bd[2])}% dari ${bd[1]} order</div><div class="mute" style="margin:12px 0 6px">Cancel per jam (jam puncak: ${top3.map(h=>p2(h)+':00').join(', ')||'–'})</div><div class="hrs">${hh.map((c,h)=>`<div title="${p2(h)}:00 = ${c}">${c||''}<i style="height:${c/hm*125}px;${top3.includes(h)?'background:#dc2626':''}"></i>${h%3==0?h:'&nbsp;'}</div>`).join('')}</div>`:'';
- const G=grp(L),rows=Object.entries(G).map(([k,a])=>({k,...agg(a,D)})).sort((a,b)=>(pc(b.c,b.n)||0)-(pc(a.c,a.n)||0)),mx=Math.max(1,...rows.map(r=>pc(r.c,r.n)||0));
- $('#kc').innerHTML='<tr><th class="l">Kacab</th><th>Toko</th><th>Order masuk</th><th>Cancel</th><th class="l" style="min-width:150px">CR% (order)</th><th>Penjualan</th><th>Stok habis</th><th>Offline rate</th><th>Hari offline &gt; '+TG+'%</th></tr>'+rows.map(r=>{const v=pc(r.c,r.n),o=pc(r.o,r.sc);return`<tr><td>${r.k}</td><td>${r.st}</td><td>${r.n}</td><td>${r.c}</td><td class="l"><b class="${cls(v)}">${f(v)}</b><div class="bar"><i style="width:${(v||0)/mx*100}%"></i></div></td><td>${jt(r.v)}</td><td>${r.r[0]}</td><td class="${ocls(o)}">${o==null?'–':f(o)+'%'}</td><td>${r.dn?f(pc(r.hi,r.dn),0)+'%':'–'}</td></tr>`}).join('');
- const ro=rows.map(r=>({...r,or:pc(r.o,r.sc)})).filter(r=>r.or!=null).sort((a,b)=>b.or-a.or);
- $('#ob').innerHTML=ro.map(r=>`<div style="margin:9px 0;font-size:12.5px"><div style="display:flex;justify-content:space-between"><span>${r.k}</span><b class="${ocls(r.or)}">${f(r.or)}%</b></div><div class="bar"><i style="width:${Math.min(100,r.or/30*100)}%"></i><s style="left:${TG/30*100}%"></s></div></div>`).join('')||'<div class="mute">Belum ada data offline.</div>';
+ $('#pk').innerHTML=D.length?`<div class="mute">Hari cancel terbanyak</div><div class="kv">${bd[0]}</div><div class="mute">${bd[3]} cancel · ${f(bd[2])}% dari ${bd[1]} order</div><div class="mute" style="margin:12px 0 6px">Cancel per jam${fk?' · seluruh wilayah (data jam belum per Kacab)':''} (jam puncak: ${top3.map(h=>p2(h)+':00').join(', ')||'–'})</div><div class="hrs">${hh.map((c,h)=>`<div title="${p2(h)}:00 = ${c}">${c||''}<i style="height:${c/hm*125}px;${top3.includes(h)?'background:#dc2626':''}"></i>${h%3==0?h:'&nbsp;'}</div>`).join('')}</div>`:'';
+ const dr=!!fk,WA=agg(AL.L,AL.D),WPg=P?agg(calc(P,true).L,P):null,wcr=pc(WA.c,WA.n),wp=WPg?pc(WPg.c,WPg.n):null,wd=wcr!=null&&wp!=null?wcr-wp:null,wo=pc(WA.o,WA.sc),G=grp(L),rows=Object.entries(G).map(([k,a])=>({k,nm:dr?(a[0].name||k):k,...agg(a,D)})).sort((a,b)=>(pc(b.c,b.n)||0)-(pc(a.c,a.n)||0)),mx=Math.max(1,...rows.map(r=>pc(r.c,r.n)||0));
+ $('#kc').innerHTML='<tr><th class="l">'+(dr?'Toko':'Kacab')+'</th>'+(dr?'':'<th>Toko</th>')+'<th>Order masuk</th><th>Cancel</th><th class="l" style="min-width:150px">CR% (order)</th><th>Δ CR (pt)</th><th>Penjualan</th><th>Stok habis</th><th>Offline rate</th><th>Hari offline &gt; '+TG+'%</th></tr>'+(dr?`<tr style="background:#f3fbf6;font-weight:700"><td>Total wilayah</td><td>${WA.n}</td><td>${WA.c}</td><td class="l"><b class="${cls(wcr)}">${f(wcr)}</b></td><td class="${wd>0?'bad':wd<0?'ok':''}">${wd==null?'–':(wd>0?'+':'')+f(wd)}</td><td>${jt(WA.v)}</td><td>${WA.r[0]}</td><td class="${ocls(wo)}">${wo==null?'–':f(wo)+'%'}</td><td>${WA.dn?f(pc(WA.hi,WA.dn),0)+'%':'–'}</td></tr>`:'')+rows.map(r=>{const v=pc(r.c,r.n),pv=pk(r.k),d=v!=null&&pv!=null?v-pv:null,o=pc(r.o,r.sc);return`<tr><td>${r.nm}</td>${dr?'':`<td>${r.st}</td>`}<td>${r.n}</td><td>${r.c}</td><td class="l"><b class="${cls(v)}">${f(v)}</b><div class="bar"><i style="width:${(v||0)/mx*100}%"></i></div></td><td class="${d>0?'bad':d<0?'ok':''}">${d==null?'–':(d>0?'+':'')+f(d)}</td><td>${jt(r.v)}</td><td>${r.r[0]}</td><td class="${ocls(o)}">${o==null?'–':f(o)+'%'}</td><td>${r.dn?f(pc(r.hi,r.dn),0)+'%':'–'}</td></tr>`}).join('');
+ const ro=rows.map(r=>({...r,or:pc(r.o,r.sc)})).filter(r=>r.or!=null).sort((a,b)=>b.or-a.or);if(dr&&wo!=null)ro.unshift({nm:'Total wilayah',or:wo});
+ $('#ob').innerHTML=ro.map(r=>`<div style="margin:9px 0;font-size:12.5px"><div style="display:flex;justify-content:space-between"><span>${r.nm}</span><b class="${ocls(r.or)}">${f(r.or)}%</b></div><div class="bar"><i style="width:${Math.min(100,r.or/30*100)}%"></i><s style="left:${TG/30*100}%"></s></div></div>`).join('')||'<div class="mute">Belum ada data offline.</div>';
  const bk=D.length<=14?D.map(d=>[d]):Array.from({length:Math.ceil(D.length/7)},(_,i)=>D.slice(i*7,i*7+7));
  const bv=a=>bk.map(b=>{let n=0,c=0;a.forEach(s=>b.forEach(d=>{const x=s.d[d];if(x){n+=x[0];c+=x[2]+x[3]+x[4]+x[5]}}));return pc(c,n)});
- $('#kt').innerHTML='<tr><th class="l">Kacab</th>'+bk.map(b=>`<th>${fd(b[0])}${b.length>1?'+':''}</th>`).join('')+'</tr>'+rows.map(r=>`<tr><td>${r.k}</td>`+bv(G[r.k]).map(v=>`<td><span class="hc" ${heat(v,15)}>${f(v)}</span></td>`).join('')+'</tr>').join('');
- $('#fk').innerHTML='<option value="">Semua Kacab</option>'+Object.keys(G).sort().map(k=>`<option ${k==fk?'selected':''}>${k}</option>`).join('');tbl()}
+ $('#kt').innerHTML='<tr><th class="l">'+(dr?'Toko':'Kacab')+'</th>'+bk.map(b=>`<th>${fd(b[0])}${b.length>1?'+':''}</th>`).join('')+'</tr>'+(dr?`<tr style="font-weight:700"><td>Total wilayah</td>`+bv(AL.L).map(v=>`<td><span class="hc" ${heat(v,15)}>${f(v)}</span></td>`).join('')+'</tr>':'')+rows.map(r=>`<tr><td>${r.nm}</td>`+bv(G[r.k]).map(v=>`<td><span class="hc" ${heat(v,15)}>${f(v)}</span></td>`).join('')+'</tr>').join('');
+ const KL=[...new Set(AL.L.map(s=>s.kacab))].sort();$('#gk').innerHTML='<option value="">Semua Kacab</option>'+KL.map(k=>`<option ${k==fk?'selected':''}>${k}</option>`).join('');
+ $('#kb').textContent=fk?'Kacab: '+fk:'';$('#h-kc').textContent=dr?'Per toko · '+fk:'Per Kacab';
+ $('#h-ob').innerHTML=(dr?'Offline rate per toko · '+fk:'Offline rate per Kacab')+' <span class="mute">(garis hitam = batas '+TG+'%)</span>';
+ $('#h-kt').textContent=(dr?'Tren per toko · ':'Tren per Kacab · ')+'cancel rate (%)';extra(D,L,G,rows,AL,dr);
+ tbl()}
+const wks=()=>{const a=[];for(let i=0;i<ALL.length;i+=7)a.push(ALL.slice(i,i+7));return a.slice(-12)},wl=b=>fd(b[0])+(b.length<7?'*':'');
+function wm(a,b){let n=0,c=0,o=0,sc=0;a.forEach(s=>b.forEach(d=>{const x=s.d[d];if(!x)return;n+=x[0];c+=x[2]+x[3]+x[4]+x[5];if(x[7]){o+=x[6];sc+=x[7]}}));return[pc(c,n),pc(o,sc)]}
+function lineW(xs,ser,fm,W=640,H=210){const pl=40,pr=14,pt=18,pb=28,all=ser.flatMap(s=>s.v).filter(v=>v!=null);if(!all.length)return'<div class="mute">Belum ada data</div>';
+ const mx=Math.max(...all)*1.15||1,n=xs.length,X=i=>pl+(n<2?(W-pl-pr)/2:i*(W-pl-pr)/(n-1)),Y=v=>pt+(H-pt-pb)*(1-v/mx);let g='';
+ for(let i=0;i<=3;i++){const y=Y(mx*i/3);g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="#e8eeea"/><text x="${pl-6}" y="${y+3}" text-anchor="end" font-size="10" fill="#66726c">${f(mx*i/3,mx<20?1:0)}</text>`}
+ g+=xs.map((l,i)=>`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#66726c">${l}</text>`).join('');
+ ser.forEach(s=>{const p=s.v.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);if(!p.length)return;
+  g+=`<polyline points="${p.map(q=>q.join(',')).join(' ')}" fill="none" stroke="${s.c}" stroke-width="${s.w}" ${s.d?`stroke-dasharray="${s.d}"`:''} stroke-linejoin="round"><title>${s.t||''}</title></polyline>`;
+  if(s.lab)g+=p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="3.5" fill="#fff" stroke="${s.c}" stroke-width="2"/>`).join('')+s.v.map((v,i)=>v==null?'':`<text x="${X(i)}" y="${Y(v)-8}" text-anchor="middle" font-size="10" font-weight="700" fill="${s.c}">${fm(v)}</text>`).join('')});
+ return`<svg viewBox="0 0 ${W} ${H}" style="width:100%">${g}</svg>`}
+function extra(D,L,G,rows,AL,dr){
+ const ww=window.innerWidth>=800?[1100,250]:[640,230],WK=wks(),xs=WK.map(wl),ent=Object.entries(G),mk=(a,i)=>WK.map(b=>wm(a,b)[i]),kid=i=>ent.map(([k,a])=>({v:mk(a,i),c:'#cfd8d2',w:1,t:dr?(a[0].name||k):k})),
+  ref=i=>dr?[{v:mk(AL.L,i),c:'#1c2420',w:2,d:'5 4',t:'Total wilayah'}]:[],nm=dr?fk:'Total wilayah',
+  lg=`Garis tebal = ${nm} · abu-abu = tiap ${dr?'toko':'Kacab'} (arahkan kursor untuk nama)${dr?' · putus-putus = total wilayah':''} · * = minggu belum penuh`;
+ $('#w1').innerHTML=lineW(xs,[...kid(0),...ref(0),{v:mk(L,0),c:'#dc2626',w:3,lab:1,t:nm}],v=>f(v)+'%',...ww)+`<div class="mute">${lg}</div>`;
+ $('#w2').innerHTML=lineW(xs,[...kid(1),{v:xs.map(()=>TG),c:'#1c2420',w:1,d:'2 3',t:'Batas '+TG+'%'},...ref(1),{v:mk(L,1),c:'#00a54f',w:3,lab:1,t:nm}],v=>f(v)+'%',...ww)+`<div class="mute">${lg} · titik-titik = batas offline ${TG}%</div>`;
+ // pola hari dalam seminggu
+ const hn=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],B=hn.map(()=>({n:0,c:0,o:0,sc:0,d:0}));
+ D.forEach(d=>{const w=new Date(d+'T00:00:00').getDay();B[w].d++;L.forEach(s=>{const x=s.d[d];if(!x)return;B[w].n+=x[0];B[w].c+=x[2]+x[3]+x[4]+x[5];if(x[7]){B[w].o+=x[6];B[w].sc+=x[7]}})});
+ const od=[1,2,3,4,5,6,0],cv=od.map(i=>pc(B[i].c,B[i].n)),cm=Math.max(1,...cv.map(v=>v||0)),wi=cv.indexOf(Math.max(...cv.map(v=>v==null?-1:v)));
+ $('#dw').innerHTML=`<div style="display:flex;gap:6px">${od.map((i,j)=>{const b=B[i],v=cv[j];return`<div style="flex:1;text-align:center;font-size:11px"><div class="${cls(v)}" style="font-weight:700">${f(v)}%</div><div style="height:90px;display:flex;align-items:flex-end"><i style="display:block;width:100%;height:${(v||0)/cm*100}%;min-height:2px;border-radius:4px 4px 0 0;background:${j==wi&&v?'#dc2626':'#f5c9c9'}"></i></div><b>${hn[i]}</b><div class="mute">${b.n} order</div><div class="mute">${b.sc?f(b.o/b.sc*100)+'% off':'–'}</div><div class="mute">${b.d}× hari</div></div>`}).join('')}</div><div class="mute" style="margin-top:8px">Cancel rate, order, dan offline rate per hari dalam seminggu pada periode terpilih (${D.length} hari). “× hari” = berapa hari yang masuk hitungan; makin banyak minggu terkumpul, makin bisa dipercaya.</div>`;
+ // alasan cancel per kacab / toko
+ const mc=Math.max(1,...rows.map(r=>r.c));$('#h-rk').textContent=dr?'Alasan cancel per toko · '+fk:'Alasan cancel per Kacab';
+ $('#rk').innerHTML=RS.map((n,i)=>`<span class="leg" style="display:inline-flex;margin-right:12px"><u style="background:${RC[i]}"></u>${n}</span>`).join('')+([...rows].filter(r=>r.c>0).sort((a,b)=>b.c-a.c).map(r=>`<div style="margin:9px 0;font-size:12.5px"><div style="display:flex;justify-content:space-between;gap:8px"><span>${r.nm}</span><span><b>${r.c}</b> <span class="mute">${RS.map((n,i)=>r.r[i]?n.split(' ')[0]+' '+r.r[i]:'').filter(Boolean).join(' · ')}</span></span></div><div style="display:flex;height:10px;width:${r.c/mc*100}%;border-radius:5px;overflow:hidden;background:#eef2ef">${r.r.map((v,i)=>`<i style="width:${v/r.c*100}%;background:${RC[i]}" title="${RS[i]}: ${v}"></i>`).join('')}</div></div>`).join('')||'<div class="mute" style="margin-top:8px">Tidak ada cancel di periode ini</div>')}
+function closeD(){$('#dm').style.display='none'}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeD()});
+let lw=window.innerWidth>=800;window.addEventListener('resize',()=>{const n=window.innerWidth>=800;if(n!==lw){lw=n;render()}});
+function openD(id){const{D,L}=calc(),s=L.find(u=>String(u.id)===String(id));if(!s||!D.length)return;const AL=calc(undefined,true),WK=wks(),xs=WK.map(wl),mk=(a,i)=>WK.map(b=>wm(a,b)[i]),nm=s.name||s.id;
+ const kp=(l,v,t)=>`<div class="c kc" style="--a:#00a54f;margin:0"><div class="mute">${l}</div><div class="kv" style="font-size:20px">${v}</div><div class="mute">${t}</div></div>`;
+ $('#db').innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h2 style="font-size:17px;margin:0">${nm}</h2><div class="mute">${s.kacab} · ${fd(D[0])} – ${fd(D[D.length-1])} (${D.length} hari)</div></div><button onclick="closeD()">Tutup ✕</button></div>
+ <div class="g k" style="margin:12px 0">${kp('Order masuk',s.n,'penjualan '+jt(s.v))}${kp('Cancel',s.c,`<span class="${cls(s.cr)}">${f(s.cr)}%</span> dari order`)}${kp('Offline rate',s.or==null?'–':`<span class="${ocls(s.or)}">${f(s.or)}%</span>`,'batas '+TG+'% dari jadwal')}${kp('Hari offline > '+TG+'%',s.dn?f(s.hi/s.dn*100,0)+'%':'–',s.hi+' dari '+s.dn+' hari')}</div>
+ <div class="g two"><div><h2>Cancel rate per minggu (%)</h2>${lineW(xs,[{v:mk(AL.L,0),c:'#1c2420',w:2,d:'5 4',t:'Total wilayah'},{v:mk([s],0),c:'#dc2626',w:3,lab:1,t:nm}],v=>f(v)+'%')}<div class="mute">Putus-putus = total wilayah</div></div>
+ <div><h2>Offline rate per minggu (%)</h2>${lineW(xs,[{v:xs.map(()=>TG),c:'#1c2420',w:1,d:'2 3',t:'Batas'},{v:mk([s],1),c:'#00a54f',w:3,lab:1,t:nm}],v=>f(v)+'%')}<div class="mute">Titik-titik = batas ${TG}% · * = minggu belum penuh</div></div></div>
+ <h2 style="margin-top:6px">Alasan cancel (periode terpilih)</h2>${RS.map((n,i)=>`<div class="leg"><u style="background:${RC[i]}"></u><span style="flex:1">${n}</span><b>${s.r[i]}</b></div>`).join('')}
+ <h2 style="margin-top:14px">Per tanggal</h2><div class="ov" style="max-height:320px"><table>${det(s,D,1)}</table></div>`;
+ $('#dm').style.display='flex'}
+function setK(v){fk=v;render()}
 function sortBy(k){sd=sk==k?-sd:-1;sk=k;tbl()}
 const OP=new Set();function tg(k){OP.has(k)?OP.delete(k):OP.add(k);tbl()}
 function det(s,D,cs){const R=D.map(d=>{const x=s.d[d];if(!x)return`<tr><td>${fd(d)}</td><td colspan="6" class="mute">tidak ada data</td></tr>`;const c=x[2]+x[3]+x[4]+x[5],ok=x[7],rs=RS.map((n,i)=>x[2+i]?n.replace(/ \(.*/,'')+' '+x[2+i]:'').filter(Boolean).join(', ')||'–';
@@ -154,7 +206,7 @@ function tbl(){const{D,L}=calc(),Q=q.toLowerCase(),sh=D.length<=14;
  const a=L.filter(s=>(!fk||s.kacab==fk)&&(!Q||s.name.toLowerCase().includes(Q)));
  a.sort((x,y)=>{const u=x[sk],v=y[sk];if(u==null)return 1;if(v==null)return -1;return(u>v?1:u<v?-1:0)*sd});
  const H=[['name','Toko'],['kacab','Kacab'],['n','Order'],['c','Cancel'],['cr','CR%'],['stok','Stok habis'],['or','Offline %']].map(h=>`<th class="${h[0]=='name'||h[0]=='kacab'?'l':''}" onclick="sortBy('${h[0]}')">${h[1]}</th>`).join('');
- $('#st').innerHTML='<tr>'+H+(sh?D.map(d=>`<th>${fd(d)}</th>`).join(''):'')+'</tr>'+a.map(s=>`<tr class="sr" data-k="${s.id.replace(/"/g,'&quot;')}" onclick="tg(this.dataset.k)"><td title="${s.id}"><span class="ar">${OP.has(s.id)?'▾':'▸'}</span>${s.name}<span class="bt">lihat detail</span></td><td class="l">${s.kacab}</td><td>${s.n}</td><td>${s.c}</td><td class="${cls(s.cr)}">${f(s.cr)}</td><td>${s.stok}</td><td class="${ocls(s.or)}">${f(s.or)}</td>`+(sh?D.map(d=>{const x=s.d[d];if(!x||!x[7])return'<td>–</td>';return`<td><span class="hc" ${heat(x[6]/x[7]*100,40)}>${f(x[6]/x[7]*100,0)}</span></td>`}).join(''):'')+'</tr>'+(OP.has(s.id)?det(s,D,7+(sh?D.length:0)):'')).join('')}
+ $('#st').innerHTML='<tr>'+H+(sh?D.map(d=>`<th>${fd(d)}</th>`).join(''):'')+'</tr>'+a.map(s=>`<tr class="sr" data-k="${s.id.replace(/"/g,'&quot;')}" onclick="openD(this.dataset.k)"><td title="${s.id}"><span class="ar">▸</span>${s.name}<span class="bt">lihat detail</span></td><td class="l">${s.kacab}</td><td>${s.n}</td><td>${s.c}</td><td class="${cls(s.cr)}">${f(s.cr)}</td><td>${s.stok}</td><td class="${ocls(s.or)}">${f(s.or)}</td>`+(sh?D.map(d=>{const x=s.d[d];if(!x||!x[7])return'<td>–</td>';return`<td><span class="hc" ${heat(x[6]/x[7]*100,40)}>${f(x[6]/x[7]*100,0)}</span></td>`}).join(''):'')+'</tr>').join('')}
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const rep=(t,k,v)=>{const a='/*'+k+'*/',b='/*'+k+'E*/',i=t.indexOf(a),j=t.indexOf(b,i);return t.slice(0,i+a.length)+v+t.slice(j)};
 function dl(){const AX=alld(),st=Object.values(S).map(s=>[s.id,s.name,s.kacab,AX.map(d=>s.d[d]||null)]);

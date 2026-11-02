@@ -88,20 +88,21 @@
   }
 
   /* ---------- KPI cards ---------- */
-  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px;}
   .kpi{
     background:var(--surface);border:1px solid var(--border);border-radius:12px;
     padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden;
   }
   .kpi .label{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-  .kpi .value{font-family:var(--font-num);font-size:24px;font-weight:700;margin-top:8px;letter-spacing:-0.5px;}
+  .kpi .value{font-family:var(--font-num);font-size:21px;font-weight:700;margin-top:8px;letter-spacing:-0.5px;}
   .kpi .sub{font-size:12px;margin-top:6px;color:var(--muted);font-weight:600;}
   .kpi .sub.up{color:var(--good);}
   .kpi .sub.down{color:var(--bad);}
   .kpi .accent-bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--chili);}
   .kpi:nth-child(2) .accent-bar{background:var(--amber);}
-  .kpi:nth-child(3) .accent-bar{background:var(--good);}
-  .kpi:nth-child(4) .accent-bar{background:#5B6AD0;}
+  .kpi:nth-child(3) .accent-bar{background:#0E9AA7;}
+  .kpi:nth-child(4) .accent-bar{background:var(--good);}
+  .kpi:nth-child(5) .accent-bar{background:#5B6AD0;}
 
   /* ---------- panels row ---------- */
   .panels{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;align-items:stretch;}
@@ -253,6 +254,8 @@
   .drilldown-table td.col-platform{left:0;font-weight:700;color:var(--ink-soft);min-width:120px;}
   .drilldown-table td.col-metric{left:120px;color:var(--muted);font-size:10.5px;font-weight:600;min-width:64px;}
   .drilldown-table tr.metric-trx td{color:var(--muted);font-size:11px;}
+  .drilldown-table tr.metric-vot td{font-size:11px;font-weight:700;color:var(--ink-soft);}
+  .drilldown-table tr.metric-vot td.col-metric{color:var(--muted);font-size:10.5px;font-weight:600;}
   .drilldown-table tr.metric-growth td{font-size:10.5px;font-weight:700;background:#FAFAFC;}
   .drilldown-table tr.metric-growth td.col-metric{background:#FAFAFC;}
   .drilldown-table td.growth-cell.good{color:var(--good);}
@@ -327,12 +330,17 @@
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+  @media (max-width:1200px){
+    .kpis{grid-template-columns:repeat(3,1fr);}
+    .kpi .value{font-size:24px;}
+  }
   @media (max-width:1100px){
     .panels{grid-template-columns:1fr 1fr;}
     .donut-panel{grid-column:1 / -1;}
   }
   @media (max-width:900px){
     .kpis{grid-template-columns:repeat(2,1fr);}
+    .kpis .kpi:last-child:nth-child(odd){grid-column:1 / -1;}
     .panels{grid-template-columns:1fr;}
     .donut-panel{grid-column:auto;}
   }
@@ -406,6 +414,11 @@
       <div class="sub up" id="kpiTrxSub">+10.1% dibanding Aug-26</div>
     </div>
     <div class="kpi"><div class="accent-bar"></div>
+      <div class="label" title="Value of Transaction = Total Sales Online ÷ Total Transaksi">VOT (Rp/Trx)</div>
+      <div class="value" id="kpiVot">Rp 44.355</div>
+      <div class="sub" id="kpiVotSub">Sales ÷ Transaksi</div>
+    </div>
+    <div class="kpi"><div class="accent-bar"></div>
       <div class="label">Gerai Aktif</div>
       <div class="value" id="kpiActive">167 / 168</div>
       <div class="sub" id="kpiActiveSub">pada Sep-26</div>
@@ -475,7 +488,7 @@
           <th class="num" data-sort="geraiAktif">Aktif<span class="arrow">▾</span></th>
           <th class="num" data-sort="sales">Sales Online<span class="arrow">▾</span></th>
           <th class="num" data-sort="trx">Transaksi<span class="arrow">▾</span></th>
-          <th class="num" data-sort="avgTicket">Avg/Trx<span class="arrow">▾</span></th>
+          <th class="num" data-sort="avgTicket" title="Value of Transaction = Sales ÷ Transaksi">VOT<span class="arrow">▾</span></th>
           <th class="num" data-sort="growth">Growth MoM<span class="arrow">▾</span></th>
           <th style="width:70px">Detail</th>
         </tr></thead>
@@ -494,7 +507,7 @@
           <th style="width:100px">Mix Platform</th>
           <th class="num" data-sort="sales">Sales Online<span class="arrow">▾</span></th>
           <th class="num" data-sort="trx">Transaksi<span class="arrow">▾</span></th>
-          <th class="num" data-sort="avgTicket">Avg/Trx<span class="arrow">▾</span></th>
+          <th class="num" data-sort="avgTicket" title="Value of Transaction = Sales ÷ Transaksi">VOT<span class="arrow">▾</span></th>
           <th class="num" data-sort="growth">Growth MoM<span class="arrow">▾</span></th>
           <th>Status</th>
           <th style="width:70px">Detail</th>
@@ -1002,6 +1015,9 @@
 
     document.getElementById("kpiSales").textContent = fmtRp(cur.sales);
     document.getElementById("kpiTrx").textContent = fmtNum(cur.trx);
+    var curVot = cur.trx>0 ? cur.sales/cur.trx : 0;
+    var prevVot = (prev && prev.trx>0) ? prev.sales/prev.trx : null;
+    document.getElementById("kpiVot").textContent = fmtRp(curVot);
     document.getElementById("kpiActive").textContent = cur.active + " / " + cur.total;
     document.getElementById("kpiAvg").textContent = fmtRp(cur.active>0 ? cur.sales/cur.active : 0);
 
@@ -1016,6 +1032,7 @@
     }
     subEl("kpiSalesSub", cur.sales, prev?prev.sales:null);
     subEl("kpiTrxSub", cur.trx, prev?prev.trx:null);
+    subEl("kpiVotSub", curVot, prevVot);
     document.getElementById("kpiActiveSub").textContent = "pada " + periodLabel();
     document.getElementById("kpiAvgSub").textContent = "sales aktif per gerai · " + periodLabel();
   }
@@ -1630,6 +1647,17 @@
         return acc + (mm && mm.platforms[p] ? mm.platforms[p].sales : 0);
       }, 0);
     }
+    function trxForMonth(p, m){
+      return cfg.stores.reduce(function(acc, s){
+        var mm = s.months[m];
+        return acc + (mm && mm.platforms[p] ? mm.platforms[p].not : 0);
+      }, 0);
+    }
+    // VOT = Sales ÷ Transaksi (Rp per transaksi); tampil "–" kalau belum ada transaksi
+    function votCell(salesVal, trxVal){
+      if(!(trxVal>0)) return '<td class="zero-cell">–</td>';
+      return '<td>'+fmtRp(salesVal/trxVal)+'</td>';
+    }
     function growthCell(curVal, prevVal){
       if(prevVal===null) return '<td class="growth-cell muted">—</td>';
       if(prevVal===0) return curVal>0 ? '<td class="growth-cell good">Baru</td>' : '<td class="growth-cell muted">—</td>';
@@ -1662,6 +1690,11 @@
         var cls = v===0 ? ' class="zero-cell"' : '';
         return '<td'+cls+'>'+(v===0 ? '–' : fmtNum(v))+'</td>';
       }).join('');
+      var votRow = months.map(function(m){
+        var sv = salesForMonth(p, m);
+        var tv = trxForMonth(p, m);
+        return votCell(sv, tv);
+      }).join('');
       var growthRow = months.map(function(m){
         var curVal = salesForMonth(p, m);
         var prevM = prevMonthOf(m);
@@ -1669,10 +1702,11 @@
         totalPrevByMonth[m] = (totalPrevByMonth[m]||0) + (prevVal||0);
         return growthCell(curVal, prevVal);
       }).join('');
-      tbody += '<tr class="platform-start"><td class="col-platform" rowspan="3" style="border-top:2px solid var(--border);">'+
+      tbody += '<tr class="platform-start"><td class="col-platform" rowspan="4" style="border-top:2px solid var(--border);">'+
         '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:2px;background:'+PLATFORM_COLOR[p]+';display:inline-block;flex-shrink:0;"></span>'+PLATFORM_LABEL[p]+'</span></td>'+
         '<td class="col-metric">Sales</td>'+salesRow+'</tr>';
       tbody += '<tr class="metric-trx"><td class="col-metric">Trx</td>'+trxRow+'</tr>';
+      tbody += '<tr class="metric-vot"><td class="col-metric">VOT</td>'+votRow+'</tr>';
       tbody += '<tr class="metric-growth"><td class="col-metric">Growth MoM</td>'+growthRow+'</tr>';
     });
     // total row
@@ -1680,6 +1714,8 @@
     tbody += '<tr class="total-row"><td class="col-platform total-row-cell">Total</td><td class="col-metric">Sales</td>'+totalSalesRow+'</tr>';
     var totalTrxRow = months.map(function(m){ return '<td>'+fmtNum(totalsByMonthTrx[m])+'</td>'; }).join('');
     tbody += '<tr class="total-row metric-trx"><td class="col-platform"></td><td class="col-metric">Trx</td>'+totalTrxRow+'</tr>';
+    var totalVotRow = months.map(function(m){ return votCell(totalsByMonthSales[m], totalsByMonthTrx[m]); }).join('');
+    tbody += '<tr class="total-row metric-vot"><td class="col-platform"></td><td class="col-metric">VOT</td>'+totalVotRow+'</tr>';
     var totalGrowthRow = months.map(function(m){
       var idx = months.indexOf(m);
       var prevM = prevMonthOf(m);

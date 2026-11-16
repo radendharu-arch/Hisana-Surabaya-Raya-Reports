@@ -199,6 +199,16 @@ function plTot(L,p,D,key){const o=z();o.has=D.some(d=>COV[p].has(d));L.forEach(x
 function sumT(L,key){const o=z();L.forEach(x=>{const t=x[key];if(!t)return;o.n+=t.n;o.c+=t.c;o.v+=t.v;o.r[0]+=t.r[0];sumO(o,t)});o.cr=pc(o.c,o.n);return o}
 const dlt=(a,b,up,u,d=1)=>{if(a==null||b==null)return'';const x=a-b;if(Math.abs(x)<.05)return'<span class="mute">= periode lalu</span>';return`<span class="${(x>0)==up?'ok':'bad'}">${x>0?'▲':'▼'} ${f(Math.abs(x),d)} ${u}</span>`};
 
+/* Δ CR per gerai/kacab: teks jelas + tooltip angka pembanding */
+const dcell=(dl,cu,pr,C,name)=>{const{D,PDs,sub}=C,rg=a=>a.length?fd(a[0])+'–'+fd(a[a.length-1]):'–';
+ const sb=sub&&sub.length&&sub.length<C.sel.length?tr('var(--mute)','Hanya platform: '+sub.map(pn).join(', ')):'';
+ const tp=h=>`<span data-tip="${ta('<b>'+esc(name)+'</b>'+h+sb)}" style="cursor:help;border-bottom:1px dotted var(--mute)">`;
+ if(dl==null){let why;if(!PDs.length)why='Belum ada periode pembanding: tidak ada data tepat sebelum '+rg(D)+' (periode lalu harus sepanjang periode ini).';else if(!cu||!pr)why='Data periode lalu ('+rg(PDs)+') belum lengkap untuk platform yang dipilih.';else why='Order kurang dari '+P_MINN+' di salah satu periode, jadi tidak dibandingkan. Periode ini '+cu.n+' order, periode lalu '+pr.n+' order.';return tp(tr('var(--mute)',why))+'–</span>'}
+ const rows=tr('var(--mute)','Periode ini ('+rg(D)+'): CR <b>'+f(cu.cr)+'%</b> ('+cu.c+' cancel dari '+cu.n+' order)')+tr('var(--mute)','Periode lalu ('+rg(PDs)+'): CR <b>'+f(pr.cr)+'%</b> ('+pr.c+' cancel dari '+pr.n+' order)');
+ if(cu.c===0&&pr.c===0)return tp(rows)+'<span class="mute">0 cancel di kedua periode</span></span>';
+ if(Math.abs(dl)<.05)return tp(rows)+'<span class="mute">= periode lalu ('+f(pr.cr)+'%)</span></span>';
+ return tp(rows)+dlt(dl,0,false,'')+'</span>'};
+
 /* ---------- tooltip ---------- */
 const tip=$('#tip');function showTip(h,e){tip.innerHTML=h;tip.style.display='block';const w=tip.offsetWidth,hh=tip.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+hh>innerHeight-8)y=e.clientY-hh-14;tip.style.left=Math.max(4,x)+'px';tip.style.top=Math.max(4,y)+'px'}
 const hideTip=()=>tip.style.display='none';
@@ -381,13 +391,13 @@ function weekly(C){const{sel,all}=C;if(!ALLD.length){$('#wk').innerHTML='';retur
 function kacab(C){const{D,sel,all}=C,m={};all.forEach(x=>{(m[x.g.kacab||'(tanpa Kacab)']=m[x.g.kacab||'(tanpa Kacab)']||[]).push(x)});
  const R=Object.entries(m).map(([k,a])=>{const per={};PL.forEach(P=>{const o=z();o.has=a[0].per[P.k].has;a.forEach(x=>{const y=x.per[P.k];o.n+=y.n;o.c+=y.c;for(let i=0;i<4;i++)o.r[i]+=y.r[i]});o.cr=pc(o.c,o.n);per[P.k]=o});
   const t=z();sel.forEach(p=>{if(!per[p].has)return;t.n+=per[p].n;t.c+=per[p].c;t.r[0]+=per[p].r[0];t.rr=(t.rr||0)+per[p].r[0]+per[p].r[1]+per[p].r[2]});a.forEach(x=>sumO(t,x.t));
-  const s2=sumT(a,'t2'),sp=sumT(a,'pt');return{k,n:a.length,act:a.filter(x=>x.t.n>0).length,t:{...t,cr:pc(t.c,t.n),stk:pc(t.r[0],t.n),crr:pc(t.rr||0,t.n)},per,ho:hj(t),dl:s2.n>=P_MINN&&sp.n>=P_MINN?s2.cr-sp.cr:null}});
+  const s2=sumT(a,'t2'),sp=sumT(a,'pt');return{k,n:a.length,act:a.filter(x=>x.t.n>0).length,t:{...t,cr:pc(t.c,t.n),stk:pc(t.r[0],t.n),crr:pc(t.rr||0,t.n)},per,ho:hj(t),s2:C.sub.length?s2:null,sp:C.sub.length?sp:null,dl:s2.n>=P_MINN&&sp.n>=P_MINN?s2.cr-sp.cr:null}});
  const v=(r,k)=>k==='k'?r.k:k==='n'?r.n:k==='cr'?r.t.cr:k==='stk'?r.t.stk:k==='crr'?r.t.crr:k==='st'?r.t.cr:k==='o'?r.t.n:k==='c'?r.t.c:k==='ho'?r.ho:k==='dl'?r.dl:r.per[k]?r.per[k].cr:0;
  R.sort((a,b)=>{const x=v(a,ks.k),y=v(b,ks.k);if(x==null)return 1;if(y==null)return-1;return(x>y?1:x<y?-1:0)*ks.d});
  const th=(k,l,c)=>`<th class="${c||''} ${ks.k===k?'on':''}" onclick="ks={k:'${k}',d:ks.k==='${k}'?-ks.d:-1};render()">${l}${ks.k===k?(ks.d<0?' ▾':' ▴'):''}</th>`;
  const cell=o=>!o.has||!o.n?'<td>–</td>':`<td><span class="cell ${cls(o.cr)}">${f(o.cr)}</span></td>`;
  $('#kt').innerHTML='<tr>'+th('k','Kacab','l')+th('n','Gerai')+th('o','Order')+th('c','Cancel')+th('cr','CR %'+hp('cr'))+th('st','Status target'+hp('status'))+th('dl','Δ CR (pt)'+hp('delta'))+th('crr','CR gerai'+hp('crr'))+sel.map(p=>th(p,'CR '+pn(p))).join('')+th('stk','Stok habis %'+hp('stok'))+th('ho','Jam buka'+hp('jam'))+'</tr>'+
-  R.map(r=>`<tr class="sr ${fk===r.k?'sel':''}" onclick="fk=fk==='${r.k.replace(/'/g,"\\'")}'?'':'${r.k.replace(/'/g,"\\'")}';render()"><td>${esc(r.k)}</td><td>${r.n}</td><td>${fi(r.t.n)}</td><td>${fi(r.t.c)}</td><td><span class="cell ${cls(r.t.cr)}">${f(r.t.cr)}</span></td><td>${stp(r.t.cr)}</td><td>${r.dl==null?'–':dlt(r.dl,0,false,'')}</td><td><span class="cell ${cls(r.t.crr)}">${f(r.t.crr)}</span></td>${sel.map(p=>cell(r.per[p])).join('')}<td>${f(r.t.stk)}</td><td>${r.ho==null?'–':`<span class="cell ${clsO(r.ho)}">${f(r.ho)}</span>`}</td></tr>`).join('')}
+  R.map(r=>`<tr class="sr ${fk===r.k?'sel':''}" onclick="fk=fk==='${r.k.replace(/'/g,"\\'")}'?'':'${r.k.replace(/'/g,"\\'")}';render()"><td>${esc(r.k)}</td><td>${r.n}</td><td>${fi(r.t.n)}</td><td>${fi(r.t.c)}</td><td><span class="cell ${cls(r.t.cr)}">${f(r.t.cr)}</span></td><td>${stp(r.t.cr)}</td><td>${dcell(r.dl,r.s2,r.sp,C,'Kacab '+r.k)}</td><td><span class="cell ${cls(r.t.crr)}">${f(r.t.crr)}</span></td>${sel.map(p=>cell(r.per[p])).join('')}<td>${f(r.t.stk)}</td><td>${r.ho==null?'–':`<span class="cell ${clsO(r.ho)}">${f(r.ho)}</span>`}</td></tr>`).join('')}
 
 /* ---------- tabel gerai ---------- */
 function tbl(){const C=calc(),{D,sel,L}=C,Q=nk(q);
@@ -402,7 +412,7 @@ function tbl(){const C=calc(),{D,sel,L}=C,Q=nk(q);
    a.map(x=>`<tr class="sr" data-k="${esc(x.g.key)}" onclick="openD(this.dataset.k)"><td>${esc(x.g.name)}</td><td class="l">${esc(x.g.kacab)}</td><td>${hj(x.t)==null?'–':`<span class="cell ${clsO(hj(x.t))}">${f(hj(x.t))}</span>`}</td>${sel.map(p=>oc(x.per[p])).join('')}</tr>`).join('')}
  else{const cell=(o,p)=>!o.has?'<td>–</td>':`<td title="${o.c} cancel dari ${o.n} order"><span class="cell ${o.n?cls(o.cr):''}">${o.n?f(o.cr):'0 order'}</span> <span class="mute">${o.c}/${o.n}</span></td>`;
   $('#st').innerHTML='<tr>'+th('name','Gerai Internal','l')+th('kacab','Kacab','l')+th('n','Order')+th('c','Cancel')+th('cr','CR %'+hp('cr'))+th('dl','Δ CR (pt)'+hp('delta'))+th('crr','CR gerai'+hp('crr'))+sel.map(p=>th(p,pn(p)+' CR')).join('')+th('stk','Stok %'+hp('stok'))+'</tr>'+
-   a.map(x=>`<tr class="sr" data-k="${esc(x.g.key)}" onclick="openD(this.dataset.k)"><td>${esc(x.g.name)}</td><td class="l">${esc(x.g.kacab)}</td><td>${fi(x.t.n)}</td><td>${fi(x.t.c)}</td><td>${x.t.n?`<span class="cell ${cls(x.t.cr)}">${f(x.t.cr)}</span>`:'–'}</td><td>${x.dl==null?'–':dlt(x.dl,0,false,'')}</td><td>${x.t.n?`<span class="cell ${cls(crrOf(x.t))}">${f(crrOf(x.t))}</span>`:'–'}</td>${sel.map(p=>cell(x.per[p],p)).join('')}<td>${x.t.n?f(pc(x.t.r[0],x.t.n)):'–'}</td></tr>`).join('')}
+   a.map(x=>`<tr class="sr" data-k="${esc(x.g.key)}" onclick="openD(this.dataset.k)"><td>${esc(x.g.name)}</td><td class="l">${esc(x.g.kacab)}</td><td>${fi(x.t.n)}</td><td>${fi(x.t.c)}</td><td>${x.t.n?`<span class="cell ${cls(x.t.cr)}">${f(x.t.cr)}</span>`:'–'}</td><td>${dcell(x.dl,x.t2,x.pt,C,x.g.name)}</td><td>${x.t.n?`<span class="cell ${cls(crrOf(x.t))}">${f(crrOf(x.t))}</span>`:'–'}</td>${sel.map(p=>cell(x.per[p],p)).join('')}<td>${x.t.n?f(pc(x.t.r[0],x.t.n)):'–'}</td></tr>`).join('')}
  $('#tc').textContent=a.length+' dari '+L.length+' gerai'}
 
 /* ---------- detail gerai ---------- */

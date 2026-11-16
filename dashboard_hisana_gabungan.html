@@ -37,7 +37,7 @@ input[type=password]{width:140px}
 .cell.ok{background:color-mix(in srgb,var(--ok) 14%,transparent)}.cell.warn{background:color-mix(in srgb,var(--warn) 18%,transparent)}.cell.bad{background:color-mix(in srgb,var(--bad) 18%,transparent)}
 .sk{display:flex;gap:2px;height:14px;margin:6px 0 4px}.sk b{display:block;height:100%;background:var(--cc);border-radius:3px;min-width:0}
 .rk{display:grid;grid-template-columns:22px minmax(0,1.3fr) minmax(0,2fr) 64px;gap:8px;align-items:center;margin:8px 0;font-size:12.5px}
-.rk .n{color:var(--mute);font-size:11px;text-align:right}.rk .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rkb{max-height:508px;overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}.rkb .rk:first-child{margin-top:0}.rkb .rk:last-child{margin-bottom:0}.rk .n{color:var(--mute);font-size:11px;text-align:right}.rk .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pc{border-top:4px solid var(--cc)}
 svg text{fill:var(--mute);font-size:11px}.axl{stroke:var(--grid)}
 #tip{position:fixed;pointer-events:none;z-index:60;background:#1f2430;color:#fff;border-radius:10px;padding:8px 10px;font-size:12px;box-shadow:0 6px 24px rgba(20,25,40,.28);display:none;max-width:290px}#tip .mute{color:#c3c8d2}
@@ -110,8 +110,8 @@ th{background:#f8f9fb}
 <div class="c"><h2>Cancel rate per hari</h2><div class="mute">Cancel ÷ order masuk, per platform</div><div id="lg2" class="lg"></div><div id="t2"></div></div></div>
 <a class="an" id="s-top"></a><div class="g two"><div class="c"><h2>Alasan cancel</h2><div class="mute" style="margin-bottom:8px">Dikelompokkan jadi 4 kategori yang sama di ketiga platform</div><div id="rs"></div></div>
 </div>
-<div class="g two"><div class="c"><h2>Cancel terbanyak · Top 10 gerai</h2><div class="mute" style="margin-bottom:8px">Gerai yang paling banyak menyumbang cancel (dampak terbesar)</div><div id="top"></div></div>
-<div class="c"><h2>Cancel rate tertinggi · Top 10 gerai<span data-hq="cr"></span></h2><div class="mute" style="margin-bottom:8px" id="topcrn"></div><div id="topcr"></div></div></div>
+<div class="g two"><div class="c"><h2>Cancel terbanyak · Semua gerai</h2><div class="mute" style="margin-bottom:8px" id="topn">Gerai yang paling banyak menyumbang cancel (dampak terbesar)</div><div id="top"></div></div>
+<div class="c"><h2>Cancel rate tertinggi · Semua gerai<span data-hq="cr"></span></h2><div class="mute" style="margin-bottom:8px" id="topcrn"></div><div id="topcr"></div></div></div>
 <a class="an" id="s-masalah"></a><div class="c"><h2>Gerai bermasalah<span data-hq="masalah"></span></h2><div class="mute" id="pbn" style="margin-bottom:8px"></div><div class="ctl" id="pbf" style="margin-bottom:8px"></div><div class="ov" style="max-height:480px"><table id="pbt"></table></div></div>
 <a class="an" id="s-tren"></a><div class="c"><h2>Tren mingguan per Kacab · cancel rate (%)</h2><div class="mute" style="margin-bottom:6px">Minggu Senin–Minggu, memakai semua data (tidak mengikuti filter periode). Angka di header = jumlah hari ada data per platform pada minggu itu.</div><div id="wnote"></div><div class="ov"><table id="wk"></table></div></div>
 <a class="an" id="s-kacab"></a><div class="c"><h2>Per Kacab</h2><div class="mute" style="margin-bottom:8px">Klik baris untuk memfilter ke Kacab itu · klik lagi untuk melepas · Δ CR = selisih dengan periode sebelumnya, hanya untuk platform yang datanya lengkap di kedua periode (lihat catatan di kartu atas)</div><div class="ov"><table id="kt"></table></div></div>
@@ -327,13 +327,14 @@ function render(){P_CR=2*TGT;const C=calc(),{D,sel,all,L}=C;
   <div style="border-top:1px solid var(--line);margin-top:12px;padding-top:2px">${plr.map(x=>{const t=x.t,c=sum(t.r);return`<div style="margin:12px 0 4px"><div style="display:flex;justify-content:space-between"><b style="font-size:12.5px"><span style="color:${x.c}">●</span> ${x.n}</b><span class="mute">${fi(c)} cancel</span></div>
   <div class="sk">${c?t.r.map((v,i)=>v?`<b style="--cc:var(${RV[i]});flex:${v}" data-tip="${ta('<b>'+x.n+'</b>'+tr('var('+RV[i]+')',RSN[i]+': <b>'+fi(v)+'</b> ('+f(v/c*100,0)+'% dari cancel)'))}"></b>`:'').join(''):'<b style="flex:1;background:var(--grid)"></b>'}</div></div>`}).join('')}</div>`;
  /* top 10 */
- const rkl=(arr,key)=>{const mx=Math.max(1,...arr.map(x=>key==='c'?x.t.c:x.t.cr));return arr.map((x,i)=>`<div class="rk"><span class="n">${i+1}</span><span class="nm" title="${esc(x.g.name)}">${esc(x.g.name)}<div class="mute">${esc(x.g.kacab)}</div></span>
+ const rkl=(arr,key)=>{const mx=Math.max(1,...arr.map(x=>key==='c'?x.t.c:x.t.cr));return '<div class="rkb">'+arr.map((x,i)=>`<div class="rk"><span class="n">${i+1}</span><span class="nm" title="${esc(x.g.name)}">${esc(x.g.name)}<div class="mute">${esc(x.g.kacab)}</div></span>
   <div class="sk" style="margin:0;width:${(key==='c'?x.t.c:x.t.cr)/mx*100}%;min-width:8px">${sel.map(p=>x.per[p].c?`<b style="--cc:${col(p)};flex:${x.per[p].c}" data-tip="${ta('<b>'+esc(x.g.name)+'</b>'+tr(col(p),pn(p)+': <b>'+x.per[p].c+'</b> cancel dari '+x.per[p].n+' order ('+f(pc(x.per[p].c,x.per[p].n))+'%)'))}"></b>`:'').join('')}</div>
-  <span style="text-align:right">${key==='c'?`<b>${x.t.c}</b> <span class="${cls(x.t.cr)}">${f(x.t.cr,0)}%</span>`:`<b class="${cls(x.t.cr)}">${f(x.t.cr,0)}%</b> <span class="mute">${x.t.c}/${x.t.n}</span>`}</span></div>`).join('')+`<div class="lg">${sel.map(p=>`<span style="--cc:${col(p)}"><i></i>${pn(p)}</span>`).join('')}<span class="mute">${key==='c'?'angka kanan: cancel · CR':'angka kanan: CR · cancel/order'}</span></div>`};
- const top=[...L].filter(x=>x.t.c>0).sort((a,b)=>b.t.c-a.t.c||b.t.cr-a.t.cr).slice(0,10);
+  <span style="text-align:right">${key==='c'?`<b>${x.t.c}</b> <span class="${cls(x.t.cr)}">${f(x.t.cr,0)}%</span>`:`<b class="${cls(x.t.cr)}">${f(x.t.cr,0)}%</b> <span class="mute">${x.t.c}/${x.t.n}</span>`}</span></div>`).join('')+'</div>'+`<div class="lg">${sel.map(p=>`<span style="--cc:${col(p)}"><i></i>${pn(p)}</span>`).join('')}<span class="mute">${key==='c'?'angka kanan: cancel · CR':'angka kanan: CR · cancel/order'}</span></div>`};
+ const top=[...L].filter(x=>x.t.c>0).sort((a,b)=>b.t.c-a.t.c||b.t.cr-a.t.cr);
+ $('#topn').textContent=`Gerai yang paling banyak menyumbang cancel (dampak terbesar). ${top.length} gerai berurutan, 10 teratas terlihat, scroll untuk lihat sisanya.`;
  $('#top').innerHTML=top.length?rkl(top,'c'):'<div class="mute">Tidak ada cancel pada periode ini.</div>';
- const topcr=[...L].filter(x=>x.t.n>=P_MINN&&x.t.c>0).sort((a,b)=>b.t.cr-a.t.cr||b.t.c-a.t.c).slice(0,10);
- $('#topcrn').textContent=`Hanya gerai dengan minimal ${P_MINN} order, supaya gerai sepi tidak mendominasi. Batang = CR, warna = platform.`;
+ const topcr=[...L].filter(x=>x.t.n>=P_MINN&&x.t.c>0).sort((a,b)=>b.t.cr-a.t.cr||b.t.c-a.t.c);
+ $('#topcrn').textContent=`Hanya gerai dengan minimal ${P_MINN} order, supaya gerai sepi tidak mendominasi. Batang = CR, warna = platform. ${topcr.length} gerai berurutan, 10 teratas terlihat, scroll untuk lihat sisanya.`;
  $('#topcr').innerHTML=topcr.length?rkl(topcr,'cr'):'<div class="mute">Belum ada gerai dengan cukup order.</div>';
  ocards(C);problems(C);kacab(C);weekly(C);tbl()}
 function togP(k){if(on.has(k)){if(on.size>1)on.delete(k)}else on.add(k);render()}

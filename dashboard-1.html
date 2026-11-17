@@ -2217,20 +2217,21 @@ let selYear=null, selBulan=null, curTab='gerai', sortCol='revenue', sortDir=-1;
 
 const ALL_YEARS  = [...new Set(RAW.map(r=>r.tahun))].sort();
 const ALL_BULANS = [...new Set(RAW.map(r=>r.bulan_num))].sort((a,b)=>a-b);
+function latestYear(){ const ys=[...new Set(RAW.map(r=>r.tahun))].sort(); return ys[ys.length-1]||null; }
+selYear = latestYear(); // FIX: tahun selalu terpilih, default terbaru
 
 function initControls(){
   // Year pills
   const yDiv=document.getElementById('ypills');
   ALL_YEARS.forEach(y=>{
     const p=document.createElement('div');
-    p.className='mpill'+(ALL_YEARS.length===1?' on':'');
+    p.className='mpill'+(y===selYear?' on':'');
     p.textContent=y; p.dataset.y=y;
     p.onclick=()=>{
-      selYear=selYear===y?null:y;
+      selYear=y; // FIX: tahun selalu terpilih
       document.querySelectorAll('#ypills .mpill').forEach(x=>x.classList.toggle('on',x.dataset.y===selYear));
       render();
     };
-    if(ALL_YEARS.length===1) selYear=y;
     yDiv.appendChild(p);
   });
 
@@ -2704,6 +2705,7 @@ function refreshControls(){
   const areas  = [...new Set(RAW.map(r=>r.area))].sort();
   const kacabs = [...new Set(RAW.map(r=>r.kacab))].sort();
 
+  if(!years.includes(selYear)) selYear = years[years.length-1] || null; // FIX
   // Year pills
   const yDiv = document.getElementById('ypills');
   yDiv.innerHTML = '';
@@ -2711,7 +2713,7 @@ function refreshControls(){
     const p = document.createElement('div');
     p.className = 'mpill' + (selYear===y?' on':'');
     p.textContent = y; p.dataset.y = y;
-    p.onclick = ()=>{selYear=selYear===y?null:y;document.querySelectorAll('#ypills .mpill').forEach(x=>x.classList.toggle('on',x.dataset.y===selYear));render();};
+    p.onclick = ()=>{selYear=y;document.querySelectorAll('#ypills .mpill').forEach(x=>x.classList.toggle('on',x.dataset.y===selYear));render();};
     yDiv.appendChild(p);
   });
 
@@ -2839,10 +2841,6 @@ function initTracking(){
 function setTrkMode(mode,el){
   trkMode=mode; trkSortCol=null;
   document.querySelectorAll('.mode-tab').forEach(x=>x.classList.toggle('on',x.dataset.m===mode));
-  document.getElementById('trkYearLbl').style.display=mode==='monthly'?'':'none';
-  document.getElementById('trkYear').style.display=mode==='monthly'?'':'none';
-  document.getElementById('trkMonthLbl').style.display=mode==='crossyear'?'':'none';
-  document.getElementById('trkMonth').style.display=mode==='crossyear'?'':'none';
   renderTracking();
 }
 
@@ -2850,7 +2848,9 @@ function trkFilter(){
   const a=document.getElementById('trkArea').value;
   const k=document.getElementById('trkKacab').value;
   const q=document.getElementById('trkSearch').value.trim().toLowerCase();
-  return RAW.filter(r=>(a==='ALL'||r.area===a)&&(k==='ALL'||r.kacab===k)&&(!q||r.gerai.toLowerCase().includes(q)||r.kacab.toLowerCase().includes(q)));
+  const fy=document.getElementById('trkYear').value;               // '' = Semua Tahun
+  const fm=parseInt(document.getElementById('trkMonth').value)||0; // 0 = Semua Bulan
+  return RAW.filter(r=>(a==='ALL'||r.area===a)&&(k==='ALL'||r.kacab===k)&&(!fy||r.tahun===fy)&&(!fm||r.bulan_num===fm)&&(!q||r.gerai.toLowerCase().includes(q)||r.kacab.toLowerCase().includes(q)));
 }
 
 let trkColDays = {};
@@ -3570,10 +3570,10 @@ document.addEventListener("DOMContentLoaded", function(){
     <select id="trkArea" onchange="renderTracking()"><option value="ALL">Semua Area</option></select>
     <span class="flbl">Kacab</span>
     <select id="trkKacab" onchange="renderTracking()"><option value="ALL">Semua Kacab</option></select>
-    <span class="flbl" id="trkYearLbl" style="display:none">Tahun</span>
-    <select id="trkYear" style="display:none" onchange="renderTracking()"></select>
-    <span class="flbl" id="trkMonthLbl" style="display:none">Bulan</span>
-    <select id="trkMonth" style="display:none" onchange="renderTracking()"></select>
+    <span class="flbl" id="trkYearLbl">Tahun</span>
+    <select id="trkYear" onchange="trkSortCol=null;renderTracking()"></select>
+    <span class="flbl" id="trkMonthLbl">Bulan</span>
+    <select id="trkMonth" onchange="trkSortCol=null;renderTracking()"></select>
     <span style="flex:1"></span>
     <input type="text" id="trkSearch" placeholder="🔍 Cari gerai..." oninput="renderTracking()" style="width:160px">
     <span class="rcount" id="trkInfo">177 gerai</span>
@@ -8685,6 +8685,10 @@ const _origInitControls = typeof initControls !== 'undefined' ? initControls : n
 
 // Reinit on load
 document.addEventListener("DOMContentLoaded", function(){
+  // FIX: sinkronkan tampilan dengan state JS saat load. File hasil "Download HTML" menyimpan
+  // snapshot DOM terakhir (mis. tabel tampil, tombol Tabel menyala) padahal state JS = scorecard,
+  // sehingga klik Tahun/Bulan me-render view yang tersembunyi dan tabel tidak berubah.
+  window.setTab(curTab || 'gerai', document.querySelectorAll('.tab')[0]);
   // fill new dropdowns after RAW is ready
   setTimeout(()=>{
     window.refreshControls();
